@@ -1,89 +1,65 @@
 <template>
   <transition name="fade2">
-    <div id="goods"
-         v-show="showGood"
-         :class="[fun.getPhoneEnv() == 3 ? 'pcStyle' : '']">
-      <div id="navTab"
-           :class="{ hoet: hoet }">
-        <a class="nav1"
-           :class="{ current: currentClass ==0 }"
-           @click.stop="jump(0)">商品</a>
-        <a class="nav1"
-           :class="{ current: currentClass ==1 }"
-           @click.stop="jump(1)">评价</a>
-        <a class="nav1"
-           :class="{ current: currentClass ==2 }"
-           @click.stop="jump(2)">详情</a>
+    <div id="goods" v-show="showGood" :class="[fun.getPhoneEnv() == 3 ? 'pcStyle' : '']">
+      <div id="navTab" :class="{ hoet: hoet }">
+        <a class="nav1" :class="{ current: currentClass ==0 }" @click.stop="jump(0)">商品</a>
+        <a class="nav1" :class="{ current: currentClass ==1 }" @click.stop="jump(1)">评价</a>
+        <a class="nav1" :class="{ current: currentClass ==2 }" @click.stop="jump(2)">详情</a>
       </div>
-      <div id="hoid"
-           @click="goto"
-           :class="{ hoet: hoet }"
-           v-if="isCup">
+      <div id="hoid" @click="goto" :class="{ hoet: hoet }" v-if="isCup">
         <div id="back">
           <i class="mintui mintui-back"></i>
         </div>
       </div>
-      <div id="cart"
-            v-if="!is_o2o"
-           :class="{ hoet: hoet }"
-          >
-        <div id="back" v-if="!favorite"
-        @click="onFavorite(favorite)">
+      <div id="cart" v-if="!is_o2o" :class="{ hoet: hoet }">
+        <div id="back" v-if="!favorite" @click="onFavorite(favorite)">
           <i class="iconfont icon-bc_like_normal"></i>
         </div>
-        <div id="back"  v-if="favorite"
-        @click="onFavorite(favorite)">
-            <i class="iconfont icon-bc_like" style="color:#ff9601;"></i>
-          </div>
+        <div id="back" v-if="favorite" @click="onFavorite(favorite)">
+          <i class="iconfont icon-bc_like" style="color:#ff9601;"></i>
+        </div>
       </div>
-      <div id="member"
-           @click="gotoMember"
-           :class="{ hoet: hoet }"
-           v-if="isCup">
+      <div id="member" @click="gotoMember" :class="{ hoet: hoet }" v-if="isCup">
         <div id="back">
           <!-- <i class="fa fa-user"></i> -->
           <i class="iconfont icon-wode-wode"></i>
         </div>
       </div>
-      <div ref="onePage"
-           id="onePage"
-           style="overflow:hidden;">
-        <div style="-webkit-overflow-scrolling: touch;"
-             id="main">
-          <viewer :images="goodsInfo.thumb_url"
-                  style="background-color:#333;"
-                  class="section">
-            <c-myswipe :style="{ height:fun.getPhoneEnv() == 3 ? '375px' : '100vw' }"
-                       :pagination-visible="true"
-                       :slides="goodsInfo.thumb_url"
-                       :repeating="true"
-                       :auto="0"
-                       class="banner_pcStyle">
+      <div ref="onePage" id="onePage" style="overflow:hidden;">
+        <div style="-webkit-overflow-scrolling: touch;" id="main">
+          <viewer :images="goodsInfo.thumb_url" style="background-color:#333;" class="section">
+            <c-myswipe
+              :style="{ height:fun.getPhoneEnv() == 3 ? '375px' : '100vw' }"
+              :pagination-visible="true"
+              :slides="goodsInfo.thumb_url"
+              :repeating="true"
+              :auto="0"
+              class="banner_pcStyle"
+            >
               <div v-if="!fun.isTextEmpty(goodsInfo.goods_video)">
-                <video id="goods_vedio"
-                       style="width:100%;height:100%;object-fit:scale-down"
-                       :poster="goodsInfo.video_image"
-                       :src="goodsInfo.goods_video"
-                       controls
-                       webkit-playsinline="true"
-                       playsinline="true"
-                       x5-playsinline="true"
-                       x-webkit-airplay="true"
-                       x5-video-ignore-metadata="true"
-                       width="100%"
-                       height="100%">
+                <video
+                  id="goods_vedio"
+                  style="width:100%;height:100%;object-fit:scale-down"
+                  :poster="goodsInfo.video_image"
+                  :src="goodsInfo.goods_video"
+                  controls
+                  webkit-playsinline="true"
+                  playsinline="true"
+                  x5-playsinline="true"
+                  x-webkit-airplay="true"
+                  x5-video-ignore-metadata="true"
+                  width="100%"
+                  height="100%"
+                >
                   <source :src="goodsInfo.goods_video" />
                 </video>
               </div>
               <div v-if="!goodsInfo.thumb_url || goodsInfo.thumb_url == null">
-                <img :src="goodsInfo.thumb"
-                     width="100%" />
+                <img :src="goodsInfo.thumb" width="100%" />
               </div>
-              <div v-for="(ithumb, index) in goodsInfo.thumb_url"
-                   :key="index">
+              <div v-for="(ithumb, index) in goodsInfo.thumb_url" :key="index">
                 <template v-if="ithumb">
-                  <img :src="ithumb"
-                       width="100%" />
+                  <img :src="ithumb" width="100%" />
                 </template>
                 <!--<template v-if='!ithumb'>-->
                 <!--<img src="../../assets/images/img_default.png" width="100%">-->
@@ -91,185 +67,221 @@
               </div>
             </c-myswipe>
           </viewer>
-          <div class="rob-time"
-               v-if="(isBuy &&(isTime||isBegTime))">
+          <div class="rob-time" v-if="(isBuy &&(isTime||isBegTime))">
             <!-- <div class="img">
           <img src="../../assets/images/rob-time.png"
                width="16%;" />
-        </div> -->
+            </div>-->
             <ul class="price">
-              <li class="text">
-                限 时 购
-              </li>
+              <li class="text">限 时 购</li>
               <!-- <li class="none-line"><small>￥</small><b>3.2</b>&nbsp;/天</li>
-          <li class="middle-line"><small>￥</small><b>3.2</b>&nbsp;/天</li> -->
+              <li class="middle-line"><small>￥</small><b>3.2</b>&nbsp;/天</li>-->
             </ul>
-            <div class="time"
-                 v-if="!isBegTime">
+            <div class="time" v-if="!isBegTime">
               <span class="text">距离结束还有:</span>
-              <yd-countdown slot="right"
-                            :time="endTimeStr"
-                            class="bottom_time">
-                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">{%d1} <em>{%d2}</em> </em
-                    >天
-                    <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;"
-                      >{%h1}
-                      <em>{%h2}</em>
-                    </em>
-                    <b>:</b>
-                    <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;"
-                      >{%m1}
-                      <em>{%m2}</em>
-                    </em>
-                    <b>:</b>
-                    <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;"
-                      >{%s1}
-                      <em>{%s2}</em>
-                    </em>
-                  </yd-countdown>
-                </div>
-                <div class="time" v-if="isBuy &&  isBegTime">
-                  <span class="text">距开始还剩：</span>
-                  <yd-countdown slot="right" :time="begTimeStr" class="bottom_time" :callback="begTimeBtn">
-                    <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;"
-                    >{%d1} <em>{%d2}</em> </em
-                    > 天
-                    <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;"
-                    >{%h1}
-                      <em>{%h2}</em>
-                    </em>
-                    <b>:</b>
-                    <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;"
-                    >{%m1}
-                      <em>{%m2}</em>
-                    </em>
-                    <b>:</b>
-                    <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;"
-                    >{%s1}
-                      <em>{%s2}</em>
-                    </em>
-                  </yd-countdown>
+              <yd-countdown slot="right" :time="endTimeStr" class="bottom_time">
+                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">
+                  {%d1}
+                  <em>{%d2}</em>
+                </em>天
+                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">
+                  {%h1}
+                  <em>{%h2}</em>
+                </em>
+                <b>:</b>
+                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">
+                  {%m1}
+                  <em>{%m2}</em>
+                </em>
+                <b>:</b>
+                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">
+                  {%s1}
+                  <em>{%s2}</em>
+                </em>
+              </yd-countdown>
+            </div>
+            <div class="time" v-if="isBuy &&  isBegTime">
+              <span class="text">距开始还剩：</span>
+              <yd-countdown
+                slot="right"
+                :time="begTimeStr"
+                class="bottom_time"
+                :callback="begTimeBtn"
+              >
+                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">
+                  {%d1}
+                  <em>{%d2}</em>
+                </em> 天
+                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">
+                  {%h1}
+                  <em>{%h2}</em>
+                </em>
+                <b>:</b>
+                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">
+                  {%m1}
+                  <em>{%m2}</em>
+                </em>
+                <b>:</b>
+                <em style="padding:0.25rem 0.125rem;border-radius:0.125rem;">
+                  {%s1}
+                  <em>{%s2}</em>
+                </em>
+              </yd-countdown>
+            </div>
+          </div>
+          <van-row>
+            <!--<el-row>-->
+            <div class="info-box">
+              <div class="title-box">
+                <h2>
+                  <van-col :span="24" id="price" v-if="!isGoodsLove">
+                    ￥
+                    <span
+                      id="price-num"
+                      class="price-num1"
+                      v-if="goodsInfo.vip_level_status && goodsInfo.vip_level_status.status==1"
+                      style="font-size: 14px;font-weight: 500;"
+                    >{{ goodsInfo.vip_level_status.word }}</span>
+                    <span id="price-num" v-else>
+                      {{
+                      goodsInfo.has_option == 1
+                      ? goodsInfo.min_price == goodsInfo.max_price
+                      ? goodsInfo.max_price
+                      : goodsInfo.min_price + "-" + goodsInfo.max_price
+                      : goodsInfo.price
+                      }}
+                      <em v-if="isRent">/天</em>
+                    </span>
+                    <del id="original-del" v-if="!this.fun.isTextEmpty(goodsInfo.market_price)">
+                      <span class="original-price">原价:￥{{ goodsInfo.market_price }}</span>
+                    </del>
+                  </van-col>
+                  <!-- 天天兑价 -->
+                  <van-col :span="24" id="price" v-if="isGoodsLove">
+                    <template>
+                      ￥
+                      <span
+                        id="price-num"
+                        v-if="goodsInfo.vip_level_status && goodsInfo.vip_level_status.status==1"
+                        :class="[goodsInfo.vip_level_status&&goodsInfo.vip_level_status.status==1?'pricePower':'']"
+                      >
+                        {{ goodsInfo.vip_level_status&&goodsInfo.vip_level_status.status==1?goodsInfo.vip_level_status.word:goodsInfo.price }}
+                        <em v-if="isRent">/天</em>
+                      </span>
+                      <span id="price-num" v-else>
+                        {{
+                        goodsInfo.has_option == 1
+                        ? goodsInfo.min_price == goodsInfo.max_price
+                        ? goodsInfo.max_price
+                        : goodsInfo.min_price + "-" + goodsInfo.max_price
+                        : goodsInfo.price
+                        }}
+                        <em v-if="isRent">/天</em>
+                      </span>
+                    </template>
+
+                    <del id="original-del" v-if="!this.fun.isTextEmpty(goodsInfo.market_price)">
+                      <span class="original-price">原价:￥{{ goodsInfo.market_price }}</span>
+                      <em v-if="isRent">/天</em>
+                    </del>
+                  </van-col>
+                </h2>
+                <i class="iconfont icon-erweima" @click="postShow()"></i>
+                <i class="iconfont icon-fenxiang" @click="shareWeixin()"></i>
+              </div>
+              <!-- 天天兑价 add 2020年4月21日 -->
+              <div class="DpBox DpBox2" v-if="isGoodsLove">
+                <div class="daydayPrice2">
+                  <span>天天兑价</span>
+                  <span>￥{{goods_love_cash + "+" + goods_love_deduction + goods_love_name}}</span>
                 </div>
               </div>
-              <van-row>
-                <!--<el-row>-->
-                <div class="info-box">
-                  <div class="title-box">
-                    <h2>
-                      <van-col :span="24" id="price" v-if="!isGoodsLove">
-                        ￥
-                        <span id="price-num" class="price-num1" v-if="goodsInfo.vip_level_status && goodsInfo.vip_level_status.status==1" style="font-size: 14px;font-weight: 500;">
-                          {{ goodsInfo.vip_level_status.word }}
-                        </span>
-                        <span id="price-num" v-else>{{
-                          goodsInfo.has_option == 1
-                            ? goodsInfo.min_price == goodsInfo.max_price
-                              ? goodsInfo.max_price
-                              : goodsInfo.min_price + "-" + goodsInfo.max_price
-                            : goodsInfo.price
-                        }}<em v-if="isRent">/天</em></span>
-                        <del
-                          id="original-del"
-                          v-if="!this.fun.isTextEmpty(goodsInfo.market_price)"
-                          ><span class="original-price"
-                            >原价:￥{{ goodsInfo.market_price }}</span
-                          ></del>
-                      </van-col>
-                      <!-- 天天兑价 -->
-                      <van-col :span="24" id="price" v-if="isGoodsLove">
-                          <template>
-￥<span id="price-num" v-if="goodsInfo.vip_level_status && goodsInfo.vip_level_status.status==1" :class="[goodsInfo.vip_level_status&&goodsInfo.vip_level_status.status==1?'pricePower':'']">{{ goodsInfo.vip_level_status&&goodsInfo.vip_level_status.status==1?goodsInfo.vip_level_status.word:goodsInfo.price }}<em v-if="isRent">/天</em></span>
-                        <span id="price-num" v-else>{{
-                          goodsInfo.has_option == 1
-                            ? goodsInfo.min_price == goodsInfo.max_price
-                              ? goodsInfo.max_price
-                              : goodsInfo.min_price + "-" + goodsInfo.max_price
-                            : goodsInfo.price
-                        }}<em v-if="isRent">/天</em></span>
-                          </template>
-
-                        <del
-                          id="original-del"
-                          v-if="!this.fun.isTextEmpty(goodsInfo.market_price)"
-                          ><span class="original-price"
-                            >原价:￥{{ goodsInfo.market_price }}</span
-                          ><em v-if="isRent">/天</em></del
-                        >
-                      </van-col>
-                    </h2>
-                      <i class="iconfont icon-erweima" @click="postShow()"></i>
-                      <i class="iconfont icon-fenxiang" @click="shareWeixin()"></i>
-                  </div>
-                  <!-- 天天兑价 add 2020年4月21日 -->
-                  <div class="DpBox DpBox2" v-if="isGoodsLove">
-                    <div class="daydayPrice2">
-                      <span>天天兑价</span>
-                      <span>￥{{goods_love_cash + "+" + goods_love_deduction + goods_love_name}}</span>
-                    </div>
-                  </div>
-                    <!-- 2020年4月21日 删除 -->
-                    <!-- <van-col :span="24" id="titleBox">
+              <!-- 2020年4月21日 删除 -->
+              <!-- <van-col :span="24" id="titleBox">
                       <van-col :span="5" class="title"><h1 style="-webkit-box-orient:vertical;">{{ goodsInfo.title | escapeTitle }}</h1></van-col>
                       <van-col :span="5" class="coupon" v-if="isCup"><span @click="gotoCoupon" v-if="(goodsInfo.availability && goodsInfo.availability == 1) ? true : false"> 领券 <i class="fa fa-angle-right"></i></span></van-col>
-                    </van-col> -->
-                    <!-- 2020年4月21日 新增 -->
-                    <div id="titleBox">
-                      <div class="title">
-                        <h1 style="-webkit-box-orient:vertical;">{{ goodsInfo.title | escapeTitle }}</h1>
-                      </div>
-                      <div class="coupon" v-if="isCup">
-                        <span @click="gotoCoupon" v-if="(goodsInfo.availability && goodsInfo.availability == 1) ? true : false"> 领券 <i class="fa fa-angle-right"></i></span>
-                      </div>
-                    </div>
+              </van-col>-->
+              <!-- 2020年4月21日 新增 -->
+              <div id="titleBox">
+                <div class="title">
+                  <h1 style="-webkit-box-orient:vertical;">{{ goodsInfo.title | escapeTitle }}</h1>
                 </div>
-              </van-row>
-              <van-row v-if="goodsInfo.love_shoppin_gift">
+                <div class="coupon" v-if="isCup">
+                  <span
+                    @click="gotoCoupon"
+                    v-if="(goodsInfo.availability && goodsInfo.availability == 1) ? true : false"
+                  >
+                    领券
+                    <i class="fa fa-angle-right"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </van-row>
+          <van-row v-if="goodsInfo.love_shoppin_gift">
+            <van-col :span="24" id="price" class="price_box" v-if="goodsInfo.love_shoppin_gift">
+              <span style="text-align: left;width: 100%">
+                {{
+                goodsInfo.love_shoppin_gift
+                }}
+              </span>
+            </van-col>
+          </van-row>
+          <van-row>
+            <van-col :span="24" id="stockcontainer">
+              <van-col :span="12">库存:{{ goodsInfo.stock }}</van-col>
+              <van-col :span="12" class="sale">
+                {{ isRent ? "租赁次数" : "销量" }}:{{
+                goodsInfo.show_sales + goodsInfo.virtual_sales
+                }}
+              </van-col>
+            </van-col>
+          </van-row>
+          <!-- vant 1.x版本不支持在row col 添加click事件 -->
+          <div @click="gotoMemberGradeList(goodsInfo.member_discount.display_page)">
+            <van-row style="background:#f5f5f5;">
+              <van-col :span="24" id="memberBox" style="padding:0.3rem 0;" v-if="openVip == '1'">
+                <van-col :span="5" class="img">
+                  <img src="../../assets/images/goods/member@2x.png" alt />
+                </van-col>
                 <van-col
-                  :span="24"
-                  id="price"
-                  class="price_box"
-                  v-if="goodsInfo.love_shoppin_gift"
+                  :span="14"
+                  class="vipBox"
+                  v-if="goodsInfo.member_discount && goodsInfo.member_discount.discount_value"
                 >
-                  <span style="text-align: left;width: 100%">{{
-                    goodsInfo.love_shoppin_gift
-                  }}</span>
+                  <div style="font-size:12px;">
+                    {{ goodsInfo.member_discount.level_name }}专享价￥{{ goodsInfo.member_discount.discount_value }}
+                    <span v-if="isRent">/天</span>
+                  </div>
+                  <div
+                    style="font-size:12px;margin-top:0.3rem;color:#a77b00;"
+                    v-if="goodsInfo.member_discount.next_level_price!=goodsInfo.member_discount.discount_value&&goodsInfo.member_discount.next_level_price>0.00"
+                  >
+                    加入{{ goodsInfo.member_discount.next_level_name }}专享价￥{{ goodsInfo.member_discount.next_level_price }}
+                    <span v-if="isRent">/天</span>
+                  </div>
                 </van-col>
-              </van-row>
-              <van-row>
-                <van-col :span="24" id="stockcontainer">
-                  <van-col :span="12"> 库存:{{ goodsInfo.stock }} </van-col>
-                  <van-col :span="12" class="sale">
-                    {{ isRent ? "租赁次数" : "销量" }}:{{
-                      goodsInfo.show_sales + goodsInfo.virtual_sales
-                    }}
-                  </van-col>
+                <van-col :span="5" class="sale" v-if="goodsInfo.member_discount.display_page=='1'">
+                  <i class="fa fa-angle-right" style="width:100%;"></i>
                 </van-col>
-              </van-row>
-              <!-- vant 1.x版本不支持在row col 添加click事件 -->
-              <div  @click="gotoMemberGradeList(goodsInfo.member_discount.display_page)">
-                <van-row style="background:#f5f5f5;">
-                  <van-col :span="24" id="memberBox" style="padding:0.3rem 0;" v-if="openVip == '1'">
-                    <van-col :span="5" class="img"> <img src="../../assets/images/goods/member@2x.png" alt=""> </van-col>
-                    <van-col :span="14" class="vipBox"  v-if="goodsInfo.member_discount && goodsInfo.member_discount.discount_value">
-                      <div style="font-size:12px;">{{ goodsInfo.member_discount.level_name }}专享价￥{{ goodsInfo.member_discount.discount_value }}<span v-if="isRent">/天</span></div>
-                      <div style="font-size:12px;margin-top:0.3rem;color:#a77b00;" v-if="goodsInfo.member_discount.next_level_price!=goodsInfo.member_discount.discount_value&&goodsInfo.member_discount.next_level_price>0.00">加入{{ goodsInfo.member_discount.next_level_name }}专享价￥{{ goodsInfo.member_discount.next_level_price }}<span v-if="isRent">/天</span></div>
-                    </van-col>
-                    <van-col :span="5" class="sale" v-if="goodsInfo.member_discount.display_page=='1'"><i class="fa fa-angle-right"  style="width:100%;"></i></van-col>
-                  </van-col>
-                </van-row>
-              </div>
+              </van-col>
+            </van-row>
+          </div>
 
-              <div
-                class="member-box"
-                v-if="!is_o2o&&!isRent && isGoods && goodsInfo.has_option != 1 && goodsInfo.is_added==1"
-                @click="buyNow"
-              >
-                <span id="optiondiv" v-if="goodsCount > 0">已选 <em style="padding-left:0.625rem;color:#333333;">{{goodsCount + goodsInfo.sku}}</em></span>
-                <span id="optiondiv" v-else>请选择商品数量</span>
-                <i class="fa fa-angle-right"></i>
-              </div>
-              <div class="act-box">
-                <ul class="fee" v-if="goodsInfo.fee">
+          <div
+            class="member-box"
+            v-if="!is_o2o&&!isRent && isGoods && goodsInfo.has_option != 1 && goodsInfo.is_added==1"
+            @click="buyNow"
+          >
+            <span id="optiondiv" v-if="goodsCount > 0">
+              已选
+              <em style="padding-left:0.625rem;color:#333333;">{{goodsCount + goodsInfo.sku}}</em>
+            </span>
+            <span id="optiondiv" v-else>请选择商品数量</span>
+            <i class="fa fa-angle-right"></i>
+          </div>
+          <div class="act-box">
+            <ul class="fee" v-if="goodsInfo.fee">
               <li>
                 <span>{{goodsInfo.fee.name}}</span>
               </li>
@@ -277,149 +289,184 @@
                 <span>￥{{ goodsInfo.fee.money }}</span>
               </li>
             </ul>
-                <ul class="act" @click="activityShowFun" v-if="activitySwitch">
-                  <li class="act1" style="color:#999999;">活动</li>
-                  <li class="act2">
-                    <span>{{ firstActivityBtn }}</span>
-                  </li>
-                  <li class="act3">
-                    <span>{{ firstActivityCon }}</span>
-                  </li>
-                  <i class="fa fa-angle-right"></i>
-                </ul>
-                <ul class="act" @click="showParameter = true">
-                  <li class="act1" style="color:#999999;">参数</li>
-                  <li class="act2">商品参数详情</li>
-                  <li class="act3"><span></span></li>
-                  <i class="fa fa-angle-right"></i>
-                </ul>
-                <ul class="iconBox" v-if="!fun.isTextEmpty(labelList)&&labelList.is_label == '1'">
-                  <li v-if="!fun.isTextEmpty(labelList.label_pic_1)"><img :src="labelList.label_pic_1" alt="">{{labelList.paperwork_1}}</li>
-                  <li v-if="!fun.isTextEmpty(labelList.label_pic_2)"><img :src="labelList.label_pic_2" alt="">{{labelList.paperwork_2}}</li>
-                  <li v-if="!fun.isTextEmpty(labelList.label_pic_3)"><img :src="labelList.label_pic_3" alt="">{{labelList.paperwork_3}}</li>
-                  <li v-if="!fun.isTextEmpty(labelList.label_pic_4)"><img :src="labelList.label_pic_4" alt="">{{labelList.paperwork_4}}</li>
-                  <li v-if="!fun.isTextEmpty(labelList.label_pic_5)"><img :src="labelList.label_pic_5" alt="">{{labelList.paperwork_5}}</li>
-                  <li v-if="!fun.isTextEmpty(labelList.label_pic_6)"><img :src="labelList.label_pic_6" alt="">{{labelList.paperwork_6}}</li>
-                </ul>
-              </div>
+            <ul class="act" @click="activityShowFun" v-if="activitySwitch">
+              <li class="act1" style="color:#999999;">活动</li>
+              <li class="act2">
+                <span>{{ firstActivityBtn }}</span>
+              </li>
+              <li class="act3">
+                <span>{{ firstActivityCon }}</span>
+              </li>
+              <i class="fa fa-angle-right"></i>
+            </ul>
+            <ul class="act" @click="showParameter = true">
+              <li class="act1" style="color:#999999;">参数</li>
+              <li class="act2">商品参数详情</li>
+              <li class="act3">
+                <span></span>
+              </li>
+              <i class="fa fa-angle-right"></i>
+            </ul>
+            <ul class="iconBox" v-if="!fun.isTextEmpty(labelList)&&labelList.is_label == '1'">
+              <li v-if="!fun.isTextEmpty(labelList.label_pic_1)">
+                <img :src="labelList.label_pic_1" alt />
+                {{labelList.paperwork_1}}
+              </li>
+              <li v-if="!fun.isTextEmpty(labelList.label_pic_2)">
+                <img :src="labelList.label_pic_2" alt />
+                {{labelList.paperwork_2}}
+              </li>
+              <li v-if="!fun.isTextEmpty(labelList.label_pic_3)">
+                <img :src="labelList.label_pic_3" alt />
+                {{labelList.paperwork_3}}
+              </li>
+              <li v-if="!fun.isTextEmpty(labelList.label_pic_4)">
+                <img :src="labelList.label_pic_4" alt />
+                {{labelList.paperwork_4}}
+              </li>
+              <li v-if="!fun.isTextEmpty(labelList.label_pic_5)">
+                <img :src="labelList.label_pic_5" alt />
+                {{labelList.paperwork_5}}
+              </li>
+              <li v-if="!fun.isTextEmpty(labelList.label_pic_6)">
+                <img :src="labelList.label_pic_6" alt />
+                {{labelList.paperwork_6}}
+              </li>
+            </ul>
+          </div>
 
           <div id="comment" v-if="goods_type === 'appointment_goods'">
             <!-- 预约商品相关项目 -->
             <div class="evaTop">
-              <div class="evaTitle">相关项目
-              </div>
-              <div class="evaTo"
-                   style="color:#ed0606;"
-                   @click="gotoProjects()">更多&nbsp;<i class="fa fa-angle-right" style="font-size:20px;"></i>
+              <div class="evaTitle">相关项目</div>
+              <div class="evaTo" style="color:#ed0606;" @click="gotoProjects()">
+                更多&nbsp;
+                <i class="fa fa-angle-right" style="font-size:20px;"></i>
               </div>
             </div>
-            <div class="ecaBottom"
-                 v-if="!fun.isTextEmpty(projects)">
-              <van-swipe :loop="false"
-                         :width="215"
-                         class="evaLoop"
-                         :show-indicators='false'>
-                <van-swipe-item v-for="item in projects.slice(0,5)"
-                                :key="item.project_id">
+            <div class="ecaBottom" v-if="!fun.isTextEmpty(projects)">
+              <van-swipe :loop="false" :width="215" class="evaLoop" :show-indicators="false">
+                <van-swipe-item v-for="item in projects.slice(0,5)" :key="item.project_id">
                   <div class="evaLoopmain projects">
-                    <img :src="item.thumb"
-                         alt="">
+                    <img :src="item.thumb" alt />
                     <div class="user">
                       <div class="text" style="-webkit-box-orient: vertical;">{{item.project_title}}</div>
                     </div>
-                    <div  style="color: #999999">{{item.service_count}}次</div>
+                    <div style="color: #999999">{{item.service_count}}次</div>
                   </div>
                 </van-swipe-item>
               </van-swipe>
             </div>
-            <div v-if="fun.isTextEmpty(projects)"
-                 style="padding: 0.875rem;color:#999999;">抱歉，暂无相关项目 ~</div>
+            <div
+              v-if="fun.isTextEmpty(projects)"
+              style="padding: 0.875rem;color:#999999;"
+            >抱歉，暂无相关项目 ~</div>
           </div>
 
-              <c-comment class="section" :commentInfo='commentLimit?commentLimit.data:[]' :tatal='commentLimit?commentLimit.total:0' :rate='favorable_rate' :goods_id='this.$route.params.id' :isCup="this.isCup" v-on:RouterTo="FromTo"></c-comment>
-              <div v-if="!this.fun.isTextEmpty(goodsInfo.has_one_brand)">
-                <div
-                  class="brand"
-                  @click="toBrandDetail(goodsInfo.has_one_brand.id)"
-                  v-if="isCup"
-                >
-                  <ul class="logo">
-                    <li>
-                      <img :src="goodsInfo.has_one_brand.logo" alt="" class="logo_img">
-                      <span>{{goodsInfo.has_one_brand.name}}</span>
-                    </li>
-                    <li class="return">
-                      品牌介绍
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="pullUp" v-if="!showPageB"><img src="../../assets/images/goods/pull_up@2x.png" alt="" id="imgs" :class="[isPullUp?'rotateImg':'normalImg']"><i id="loadMore">{{isPullUp?'释放展开图文详情':'上拉展开图文详情'}}</i> </div>
-              <span v-if="!showPageB" style="display: inline-block;width:100%;height: 1rem;"></span>
-              <div
-                id="shopInfo"
-                ref="goodinfo"
-                class="section"
-                :class="{ goodTop: goodTop == true, bottomMargin: isMarginBottom, }"
-                v-if="showPageB"
-              >
-                <p style="" class="title-text">商品详情</p>
-                <div id="tabs">
-                  <div ref="goodPage" id="goodPage">
-                    <div>
-                        <div id="goods_content" v-html="goodDetail.content"></div>
-                        <p v-if="fun.isTextEmpty(goodDetail.content)" style="color:#666666;">暂无该商品详情 ~</p>
-                        <div
-                            class="like-list"
-                            v-if="fun.isTextEmpty(goodDetail.show_push) ? false : true"
-                          >
-                            <div class="box06">
-                              <div class="img">
-                                <img src="../../assets/images/goods/like@2x.png" />
-                              </div>
-                              <h3 class="like">猜您喜欢</h3>
+          <c-comment
+            class="section"
+            :commentInfo="commentLimit?commentLimit.data:[]"
+            :tatal="commentLimit?commentLimit.total:0"
+            :rate="favorable_rate"
+            :goods_id="this.$route.params.id"
+            :isCup="this.isCup"
+            v-on:RouterTo="FromTo"
+          ></c-comment>
+          <div v-if="!this.fun.isTextEmpty(goodsInfo.has_one_brand)">
+            <div class="brand" @click="toBrandDetail(goodsInfo.has_one_brand.id)" v-if="isCup">
+              <ul class="logo">
+                <li>
+                  <img :src="goodsInfo.has_one_brand.logo" alt class="logo_img" />
+                  <span>{{goodsInfo.has_one_brand.name}}</span>
+                </li>
+                <li class="return">品牌介绍</li>
+              </ul>
+            </div>
+          </div>
+          <div class="pullUp" v-if="!showPageB">
+            <img
+              src="../../assets/images/goods/pull_up@2x.png"
+              alt
+              id="imgs"
+              :class="[isPullUp?'rotateImg':'normalImg']"
+            />
+            <i id="loadMore">{{isPullUp?'释放展开图文详情':'上拉展开图文详情'}}</i>
+          </div>
+          <span v-if="!showPageB" style="display: inline-block;width:100%;height: 1rem;"></span>
+          <div
+            id="shopInfo"
+            ref="goodinfo"
+            class="section"
+            :class="{ goodTop: goodTop == true, bottomMargin: isMarginBottom, }"
+            v-if="showPageB"
+          >
+            <p style class="title-text">商品详情</p>
+            <div id="tabs">
+              <div ref="goodPage" id="goodPage">
+                <div>
+                  <div id="goods_content" v-html="goodDetail.content"></div>
+                  <p v-if="fun.isTextEmpty(goodDetail.content)" style="color:#666666;">暂无该商品详情 ~</p>
+                  <div
+                    class="like-list"
+                    v-if="fun.isTextEmpty(goodDetail.show_push) ? false : true"
+                  >
+                    <div class="box06">
+                      <div class="img">
+                        <img src="../../assets/images/goods/like@2x.png" />
+                      </div>
+                      <h3 class="like">猜您喜欢</h3>
+                    </div>
+                    <div class="like-box">
+                      <div
+                        class="box"
+                        v-for="item in goodDetail.show_push"
+                        :key="item.id"
+                        @click="pushGoodGoto(item)"
+                      >
+                        <div class="goods-img">
+                          <img :src="item.thumb" style="width:100%;height:100%;" />
+                        </div>
+                        <ul class="goods-info">
+                          <li
+                            class="name"
+                            style=" -webkit-box-orient: vertical;"
+                          >{{ item.title | escapeTitle }}</li>
+                          <li class="pay">
+                            <div
+                              class="left left1"
+                              v-if="goodsInfo.vip_level_status&&goodsInfo.vip_level_status.status==1"
+                            >
+                              <small style="color:red">￥</small>
+                              <span>{{ goodsInfo.vip_level_status.word }}</span>
                             </div>
-                            <div class="like-box">
-                              <div
-                                class="box"
-                                v-for="item in goodDetail.show_push" :key="item.id"
-                                @click="pushGoodGoto(item)"
-                              >
-                                <div class="goods-img">
-                                  <img :src="item.thumb" style="width:100%;height:100%;" />
-                                </div>
-                                <ul class="goods-info">
-                                  <li class="name" style=" -webkit-box-orient: vertical;">
-                                    {{ item.title | escapeTitle }}
-                                  </li>
-                                  <li class="pay">
-                                    <div class="left left1" v-if="goodsInfo.vip_level_status&&goodsInfo.vip_level_status.status==1">
-                                      <small style="color:red">￥</small>
-                                      <span>{{ goodsInfo.vip_level_status.word }}</span>
-                                    </div>
-                                    <div class="left" v-else>
-                                      <small>￥</small>
-                                      {{ item.price }}
-                                    </div>
-                                    <div class="right" v-if="item.price != item.market_price">
-                                      <small>￥</small>{{ item.market_price }}</div
-                                    >
-                                  </li>
-                                </ul>
-                              </div>
+                            <div class="left" v-else>
+                              <small>￥</small>
+                              {{ item.price }}
                             </div>
+                            <div class="right" v-if="item.price != item.market_price">
+                              <small>￥</small>
+                              {{ item.market_price }}
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
 
-                            <div class="cloud">
-                              <div class="img"><img src="../../assets/images/cloud.png" /></div>
-                              <h4>没有更多了</h4>
-                            </div>
-                          </div>
-                    <span style="display: inline-block;width:100%;height: 3rem;background-color:#f5f5f5;padding:1.5rem 0;"></span>
+                    <div class="cloud">
+                      <div class="img">
+                        <img src="../../assets/images/cloud.png" />
+                      </div>
+                      <h4>没有更多了</h4>
                     </div>
                   </div>
+                  <span
+                    style="display: inline-block;width:100%;height: 3rem;background-color:#f5f5f5;padding:1.5rem 0;"
+                  ></span>
                 </div>
               </div>
+            </div>
           </div>
+        </div>
       </div>
       <mt-popup
         v-model="popupSpecs"
@@ -453,7 +500,7 @@
           </div>
 
           <div class="shopinfo noVantRadio">
-            <dl v-for="(specs,i) in goodsInfo.has_many_specs" :key='i'>
+            <dl v-for="(specs,i) in goodsInfo.has_many_specs" :key="i">
               <dt>{{ specs.title }}</dt>
               <dd>
                 <van-radio-group
@@ -465,28 +512,21 @@
                     :class="{ vantRadioshow: specs.description == specitem }"
                     :disabled="specitem.c"
                     v-for="(specitem,i) in specs.specitem"
-                    :name="specitem" :key='i'
-                  >
-                    {{ specitem.title }}
-                  </van-radio>
+                    :name="specitem"
+                    :key="i"
+                  >{{ specitem.title }}</van-radio>
                 </van-radio-group>
               </dd>
             </dl>
           </div>
           <div v-if="!isRent">
             <van-row>
-              <van-col :span="12" id="num">
-                购买数量：
-              </van-col>
+              <van-col :span="12" id="num">购买数量：</van-col>
               <van-col :span="11">
                 <div class="num">
                   <div class="leftnav" @click="reduceGoods">-</div>
                   <!-- <input type="text" disabled=false class="shownum" v-model='goodsCount'> -->
-                  <input
-                    type="number"
-                    class="shownum"
-                    v-model.lazy="goodsCount"
-                  />
+                  <input type="number" class="shownum" v-model.lazy="goodsCount" />
                   <div class="rightnav" @click="addGoods">+</div>
                   <!-- <input type="number" class="shownum" v-model.lazy='goodsCount'> -->
                 </div>
@@ -498,18 +538,16 @@
             size="small"
             id="btsmall"
             @click="submitAction"
-            v-show="popStock>=1" >
-            确认
-          </van-button>
+            v-show="popStock>=1"
+          >确认</van-button>
           <van-button
             type="danger"
             color="#999999"
             size="small"
             disabled
             id="btsmall"
-            v-show="popStock<=0" >
-            确认
-          </van-button>
+            v-show="popStock<=0"
+          >确认</van-button>
         </div>
       </mt-popup>
 
@@ -537,18 +575,12 @@
 
           <div v-if="!isRent">
             <van-row>
-              <van-col :span="12" id="num">
-                购买数量：
-              </van-col>
+              <van-col :span="12" id="num">购买数量：</van-col>
               <van-col :span="11">
                 <div class="num">
                   <div class="leftnav" @click="reduceGoods">-</div>
                   <!-- <input type="text" disabled=false class="shownum" v-model='goodsCount'> -->
-                  <input
-                    type="number"
-                    class="shownum"
-                    v-model.lazy="goodsCount"
-                  />
+                  <input type="number" class="shownum" v-model.lazy="goodsCount" />
                   <div class="rightnav" @click="addGoods">+</div>
                   <!-- <input type="number" class="shownum" v-model.lazy='goodsCount' > -->
                 </div>
@@ -566,18 +598,15 @@
             type="danger"
             v-show="popStock>=1"
             @click="buyNowNew"
-          >
-            确认
-          </van-button>
+          >确认</van-button>
           <van-button
             type="danger"
             color="#999999"
             size="small"
             disabled
             id="btsmall"
-            v-show="popStock<=0" >
-            确认
-          </van-button>
+            v-show="popStock<=0"
+          >确认</van-button>
         </div>
       </mt-popup>
 
@@ -597,7 +626,7 @@
               src="../../assets/images/img_default.png"
               v-if="!posterImg.base64Image"
               style="width:100%;height:100%;object-fit: contain;border-radius:0.375rem;"
-            /> -->
+            />-->
           </div>
           <!-- 关闭图标 -->
           <div class="icon_close" @click="posterShow = false">
@@ -607,11 +636,7 @@
         </div>
       </mt-popup>
       <!-- 评价 -->
-      <mt-popup
-        v-model="popupVisible"
-        position="right">
-
-      </mt-popup>
+      <mt-popup v-model="popupVisible" position="right"></mt-popup>
 
       <yd-popup v-model="activityShow" position="bottom" height="60%">
         <yd-navbar
@@ -671,22 +696,25 @@
                     <span> 二级佣金<span style="color:#df1e13;">{{activityItem.second_commission}}</span>元</span><br>
                     <span> 三级佣金<span style="color:#df1e13;">{{activityItem.third_commission}}</span>元</span>
                 </span>
-            </yd-cell-item>  -->
+            </yd-cell-item>-->
 
-            <yd-cell-item v-for="(item,i) in activityArr" :key='i'>
+            <yd-cell-item v-for="(item,i) in activityArr" :key="i">
               <div
                 slot="left"
                 style="border-radius:0.1875rem;border:0.0625rem solid #f15353;color:#f15353;padding:0.125rem 0.625rem;font-size:12px;"
-              >
-                {{ item.name }}
-              </div>
-              <span slot="right" v-if="item.type == 'string'">{{
+              >{{ item.name }}</div>
+              <span slot="right" v-if="item.type == 'string'">
+                {{
                 item.value
-              }}</span>
+                }}
+              </span>
               <!-- <span slot="right" v-if="item.type == 'array'" v-for="value in item.value">{{value}}</span> -->
               <span slot="right" v-if="item.type == 'array'">
                 <span>
-                  <span v-for="(value,i) in item.value" :key='i'>{{ value }}<br /></span>
+                  <span v-for="(value,i) in item.value" :key="i">
+                    {{ value }}
+                    <br />
+                  </span>
                 </span>
               </span>
             </yd-cell-item>
@@ -717,7 +745,7 @@
               <span class="rightb">{{items.value}}</span>
             </li>
             <p class="notext" v-if="fun.isTextEmpty(goodsInfo.has_many_params)">
-              <br>抱歉，暂无该商品参数 ~
+              <br />抱歉，暂无该商品参数 ~
             </p>
           </ul>
         </div>
@@ -725,26 +753,31 @@
       <yd-popup v-model="showComment" position="right" height="100%" width="100%">
         <yd-navbar title="全部评价" fixed>
           <span slot="left">
-              <yd-navbar-back-icon @click.native="CloseComment"></yd-navbar-back-icon>
+            <yd-navbar-back-icon @click.native="CloseComment"></yd-navbar-back-icon>
           </span>
         </yd-navbar>
-      <!-- 商品评价 -->
-        <c-commentlist v-on:clickMore="getCommentData" :list='third_content' :noMoreComment='noMoreComment' :isCup='isCup' v-if="showComment"></c-commentlist>
+        <!-- 商品评价 -->
+        <c-commentlist
+          v-on:clickMore="getCommentData"
+          :list="third_content"
+          :noMoreComment="noMoreComment"
+          :isCup="isCup"
+          v-if="showComment"
+        ></c-commentlist>
       </yd-popup>
       <yd-popup v-model="showProjects" position="right" height="100%" width="100%">
         <yd-navbar title="全部相关项目" fixed>
           <span slot="left">
-              <yd-navbar-back-icon @click.native="showProjects = false"></yd-navbar-back-icon>
+            <yd-navbar-back-icon @click.native="showProjects = false"></yd-navbar-back-icon>
           </span>
         </yd-navbar>
         <div style="height: 50px"></div>
         <!-- 全部相关项目 -->
         <div class="projects1" v-for="item in projects" :key="item.project_id">
-          <img :src="item.thumb"
-               alt="">
+          <img :src="item.thumb" alt />
           <div class="user">
             <div class="text" style="-webkit-box-orient: vertical;">{{item.project_title}}</div>
-            <div  style="color: #999999;line-height: 2rem;text-align: right;">{{item.service_count}}次</div>
+            <div style="color: #999999;line-height: 2rem;text-align: right;">{{item.service_count}}次</div>
           </div>
         </div>
       </yd-popup>
@@ -755,19 +788,20 @@
             v-if="isRentBuyShow"
             @click="toRentBuy(goodsInfo.lease_toy.immed_goods_id)"
           >
-            <button>立即<br />购买</button>
+            <button>
+              立即
+              <br />购买
+            </button>
           </div>
         </div>
       </div>
 
       <div id="foot">
-      <div class="addfav"  @click="gotoCart" v-if="isCup">
+        <div class="addfav" @click="gotoCart" v-if="isCup">
           <template>
-             <ul>
+            <ul>
               <li>
-                <i
-                  class="iconfont icon-info_store"
-                ></i>
+                <i class="iconfont icon-info_store"></i>
               </li>
               <li>首页</li>
             </ul>
@@ -779,10 +813,7 @@
               <!-- <i class="fa fa-cart-plus active" @click="gotoCart1()"></i> -->
               <ul>
                 <li>
-                  <i
-                    class="iconfont icon-goods_car active"
-                    @click="gotoCart1()"
-                  ></i>
+                  <i class="iconfont icon-goods_car active" @click="gotoCart1()"></i>
                 </li>
                 <li>购物车</li>
               </ul>
@@ -793,10 +824,7 @@
           <a :href="cservice">
             <ul>
               <li>
-                <i
-                  class="iconfont icon-goods_kefu"
-                  style="font-size:1.375rem;"
-                ></i>
+                <i class="iconfont icon-goods_kefu" style="font-size:1.375rem;"></i>
               </li>
               <li>客服</li>
             </ul>
@@ -805,7 +833,9 @@
         <div class="cservice" v-if="!is_o2o && cservice && isMiniApp">
           <a @click="this.fun.gotoMiniAppCs">
             <ul>
-              <li><i class="iconfont icon-goods_kefu"></i></li>
+              <li>
+                <i class="iconfont icon-goods_kefu"></i>
+              </li>
               <li>客服</li>
             </ul>
           </a>
@@ -814,37 +844,30 @@
           :class="{ cart: true, cell: true, nocar: !isGoods || !isAddCart }"
           @click="addCart"
           v-if="isCup && !isBegTime && nocart && !isPendingOrder"
-        >
-          加入购物车
-        </div>
+        >加入购物车</div>
         <div v-if="!isRent" class="buy cell">
           <div :class="{ nocar: !isGoods }" v-if="!is_o2o" @click="buyNow">
-            <block v-if="!isBuy">
-              立即购买
-            </block>
-            <block v-if="isBuy && !isBegTime">
-              立即购买
-            </block>
-            <div
-              class="time"
-              style="line-height: 1rem;"
-              v-if="isBuy && isBegTime"
-            >
+            <block v-if="!isBuy">立即购买</block>
+            <block v-if="isBuy && !isBegTime">立即购买</block>
+            <div class="time" style="line-height: 1rem;" v-if="isBuy && isBegTime">
               <div class="text" style="padding-top: 0.5rem;">距开始还剩</div>
               <yd-countdown slot="right" :time="begTimeStr" class="bottom_time">
-                <em>{%d1} <em>{%d2}</em> </em>天
-                <em
-                  >{%h1}
+                <em>
+                  {%d1}
+                  <em>{%d2}</em>
+                </em>天
+                <em>
+                  {%h1}
                   <em>{%h2}</em>
                 </em>
                 <b>:</b>
-                <em
-                  >{%m1}
+                <em>
+                  {%m1}
                   <em>{%m2}</em>
                 </em>
                 <b>:</b>
-                <em
-                  >{%s1}
+                <em>
+                  {%s1}
                   <em>{%s2}</em>
                 </em>
               </yd-countdown>
@@ -853,21 +876,13 @@
         </div>
 
         <div v-if="isRent && !isCup" class="buy cell">
-          <div :class="{ nocar: !isGoods }" v-if="!is_o2o" @click="buyNow">
-            立即租
-          </div>
+          <div :class="{ nocar: !isGoods }" v-if="!is_o2o" @click="buyNow">立即租</div>
         </div>
       </div>
       <!-- <div :class="{bottomMargin:isMarginBottom}"></div> -->
       <!--      <div style="height:3.125rem;"></div>-->
-      <div
-        style="height: 0;"
-        v-if="this.fun.isTextEmpty(goodsInfo.show_push) ? false : true"
-      ></div>
-      <div
-        style="height: 3.125rem;"
-        v-if="this.fun.isTextEmpty(goodsInfo.show_push)"
-      ></div>
+      <div style="height: 0;" v-if="this.fun.isTextEmpty(goodsInfo.show_push) ? false : true"></div>
+      <div style="height: 3.125rem;" v-if="this.fun.isTextEmpty(goodsInfo.show_push)"></div>
     </div>
   </transition>
 </template>
@@ -1062,12 +1077,12 @@ export default goods;
 }
 // 2020年4月21日 add
 .DpBox2 {
-  padding: 0.5rem 0.75rem 0 0.75rem;
+  padding: 0.5rem 0 0 0;
   .daydayPrice2 {
     width: 100%;
     line-height: 40px;
     text-align: left;
-    background-color: #FBEFD7;
+    background-color: #fbefd7;
     color: #f15353;
     span:first-child {
       padding: 4px;

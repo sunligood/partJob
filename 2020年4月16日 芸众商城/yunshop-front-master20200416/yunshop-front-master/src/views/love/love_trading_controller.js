@@ -83,7 +83,7 @@ export default {
           "正在获取"
         )
         .then(
-          function(response) {
+          function (response) {
             if (response.result == 1) {
               var myData = response.data;
               that.total_page = response.data.total;
@@ -120,7 +120,7 @@ export default {
               //Toast(response.msg);
             }
           },
-          function(response) {
+          function (response) {
             // error callback
           }
         );
@@ -146,7 +146,7 @@ export default {
             "正在获取更多订单"
           )
           .then(
-            function(response) {
+            function (response) {
               if (response.result == 1) {
                 var myData = response.data;
 
@@ -167,15 +167,15 @@ export default {
                 return;
               }
             },
-            function(response) {
+            function (response) {
               // error callback
             }
           );
       }
     },
     revoke(id) {
-      if(isclick) {
-        isclick= false;
+      if (isclick) {
+        isclick = false;
         $http
           .get(
             "plugin.love.Frontend.Modules.Trading.Controllers.trading.revoke",
@@ -184,7 +184,7 @@ export default {
           )
           .then(
             response => {
-              setTimeout(function(){
+              setTimeout(function () {
                 isclick = true;
               }, 1000);
               if (response.result == 1) {
@@ -195,8 +195,8 @@ export default {
                 MessageBox.alert(response.msg);
               }
             },
-            function(response) {
-              setTimeout(function(){
+            function (response) {
+              setTimeout(function () {
                 isclick = true;
               }, 1000);
               MessageBox.alert(response);
@@ -205,8 +205,8 @@ export default {
       }
     },
     purchase(id) {
-      if(isclick) {
-        isclick= false;
+      if (isclick) {
+        isclick = false;
         $http
           .get(
             "plugin.love.Frontend.Modules.Trading.Controllers.trading.purchase",
@@ -215,7 +215,7 @@ export default {
           )
           .then(
             response => {
-              setTimeout(function(){
+              setTimeout(function () {
                 isclick = true;
               }, 1000);
               if (response.result == 1) {
@@ -226,8 +226,8 @@ export default {
                 MessageBox.alert(response.msg);
               }
             },
-            function(response) {
-              setTimeout(function(){
+            function (response) {
+              setTimeout(function () {
                 isclick = true;
               }, 1000);
               MessageBox.alert(response);
@@ -243,12 +243,12 @@ export default {
           response => {
             if (response.result === 1) {
               this.love_name = response.data.love_name;
-              this.guidePrice = response.data.trading_set.trading_money; // 2020年4月21日 add 指导价
+              this.guidePrice = Number(response.data.trading_set.trading_money).toFixed(2); // 2020年4月21日 add 指导价
             } else {
               MessageBox.alert(response.msg);
             }
           },
-          function(response) {
+          function (response) {
             MessageBox.alert(response);
           }
         );
@@ -259,7 +259,7 @@ export default {
       if (myData && Array.isArray(myData) && myData.length) {
         myData.forEach(item => {
           if (item.status === 1)
-          amount++
+            amount = amount + Number(item.amount)
         })
       }
       this.allCount = amount
@@ -271,8 +271,8 @@ export default {
         myData.forEach(item => {
           let date = new Date()
           let nowDate = `${date.getFullYear()}-${date.getMonth() + 1 > 9 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1)}-${date.getDate()}`
-          if (item.status === 1 && item.created_at.substr(0,10) === nowDate) {
-            amount++
+          if (item.status === 1 && item.created_at.substr(0, 10) === nowDate) {
+            amount = amount + Number(item.amount)
           }
         })
       }
