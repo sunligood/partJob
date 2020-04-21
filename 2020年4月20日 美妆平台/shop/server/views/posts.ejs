@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>node_mysql</title>
+  <link rel="stylesheet" href="./styles/reset.css">
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="./lib/layui/css/layui.css">
+</head>
+<body>
+  <%- include('common/header') %>
+  <div class="posts-info">
+    <div class="c-left">
+      <div class="user-info">
+          <img class="photo" src="./images/cat.png">
+          <p>这个人很懒，不想做啥</p>
+          <p>爱好： 篮球篮球篮球</p>
+      </div>
+    </div>
+    <div class="c-right">
+      <ul class="posts-list">
+        <li class="detail">
+          <a href="#" class="title">Promise 深入浅出</a>
+          <div class="d-footer">
+            <span>标签: javascript、css、nodejs</span>
+            <span>2020年4月17日</span>
+            <span>浏览次数：2000</span>
+          </div>
+        </li>
+        <li class="detail">
+            <a href="#" class="title">Promise 深入浅出</a>
+            <div class="d-footer">
+              <span>标签: javascript、css、nodejs</span>
+              <span>2020年4月17日</span>
+              <span>浏览次数：2000</span>
+            </div>
+          </li>
+      </ul>
+    </div>
+  </div>
+</body>
+<script src="./lib/layui/layui.js"></script>
+<script src="./lib/axios.js"></script>
+<script>
+  //Demo
+  layui.use('form', function(){
+    var form = layui.form;
+    //监听提交
+    form.on('submit(formDemo)', function(data){
+      layer.msg(JSON.stringify(data.field));
+      axios.post('http://localhost:3000/signin', data.field)
+        .then(res => {
+          console.log(res)
+        })
+      return false;
+    });
+  });
+</script>
+
+</html>

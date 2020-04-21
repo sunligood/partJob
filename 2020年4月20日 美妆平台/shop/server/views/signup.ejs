@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>node_mysql</title>
+  <link rel="stylesheet" href="./styles/reset.css">
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="./lib/layui/css/layui.css">
+</head>
+<body>
+  <%- include('common/header') %>
+  <div class="c-main login-info">
+    <form class="layui-form" action="">
+      <div class="layui-form-item">
+        <input type="text" name="username" required  lay-verify="required" placeholder="用户名" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-item">
+        <input type="text" name="phone"" required  lay-verify="required" placeholder="手机号" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-item">
+        <input type="text" name="email" required  lay-verify="required" placeholder="邮箱" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-item">
+        <input type="password" name="password" required  lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-item">
+        <input type="password" name="conPassword" required  lay-verify="required" placeholder="确认密码" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-form-item">
+        <button class="layui-btn layui-btn-normal layui-btn-fluid" lay-submit lay-filter="formDemo">注册</button>
+      </div>
+    </form>
+  </div>
+  
+</body>
+<script src="./lib/layui/layui.js"></script>
+<script src="./lib/axios.js"></script>
+<script>
+  //Demo
+  layui.use('form', function(){
+    var form = layui.form;
+    
+    //监听提交
+    form.on('submit(formDemo)', function(data){
+      layer.msg(JSON.stringify(data.field));
+      axios.post('/signup', data.field)
+        .then(res => {
+          console.log(res)
+        })
+      return false;
+    });
+  });
+</script>
+
+</html>
