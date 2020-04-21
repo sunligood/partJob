@@ -1,13 +1,12 @@
 <template>
-  <div class="home">
+  <div class="store">
     <common-title></common-title>
     <div class="c-main">
       <div class="main-title">
         <h1 class="title">美妆平台</h1>
         <div class="search">
-          <!-- <el-input v-model="goodsKey" placeholder="请输入商品"></el-input> -->
           <input type="text" v-model="goodsKey" placeholder="请输入商品" />
-          <div class="search-btn" @click="goShop">搜索</div>
+          <div class="search-btn">搜索</div>
         </div>
         <div class="shop-car">
           <span class="count">1</span>
@@ -15,49 +14,52 @@
           <span class="text">我的购物车</span>
         </div>
       </div>
-      <div class="banner">
-        <el-carousel trigger="click" height="400px">
-          <el-carousel-item v-for="item in banner" :key="item">
-            <img :src="item" width="800px" />
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="shop">
-        <el-link type="primary" @click="$router.push('/store/all')">去购物</el-link>
-        <i class="el-icon-right"></i>
-      </div>
+      <el-row :gutter="20">
+        <el-col :span="6" v-for="item in 10" :key="item">
+          <div class="grid-content bg-purple">
+            <div class="img">
+              <img src="../../assets/goods1.png" width="160px" />
+            </div>
+            <p class="price">&yen;2000.00</p>
+            <p class="title">这是商品描述这是商品描述这是商品描述这是商品描述</p>
+            <p class="evaluate">
+              已有
+              <b>11</b>人评价
+            </p>
+            <p class="shop">神秘商铺</p>
+          </div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 
 <script>
-import CommonTitle from '../components/CommonTitle'
+import CommonTitle from '../../components/CommonTitle'
 export default {
-  name: 'Home',
+  name: 'Store',
   data() {
     return {
-      banner: [
-        require('../assets/banner/1.webp'),
-        require('../assets/banner/2.webp'),
-        require('../assets/banner/3.webp'),
-        require('../assets/banner/4.webp')
-      ],
-      goodsKey: '' //商品关键词
+      goodsKey: '', //商品关键词
+      goodsList: [] // 商品列表数据
     }
   },
-  methods: {
-    goShop(str) {
-      if (!this.goodsKey) return
-      this.$router.push(`/store/${this.goodsKey}`)
+  created() {
+    let routeParams = this.$route.params
+    if (routeParams.keys === 'all') {
+      this.goodsKey = ''
+    } else if (routeParams.keys) {
+      this.goodsKey = routeParams.keys
     }
   },
+  methods: {},
   components: {
     CommonTitle
   }
 }
 </script>
 <style lang="scss" scoped>
-.home {
+.store {
   .c-main {
     margin: 0 auto;
     width: 800px;
@@ -128,14 +130,41 @@ export default {
         border-color: #409eff;
       }
     }
-  }
-  .shop {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-top: 50px;
-    i {
-      color: #409eff;
+    .grid-content {
+      height: 280px;
+      padding: 10px;
+      border: 1px solid #fff;
+      cursor: pointer;
+      transition: border-color 0.2s ease;
+      .img {
+        text-align: center;
+      }
+      .price {
+        padding: 5px 0;
+        color: #e4393c;
+        font-size: 20px;
+      }
+      .title {
+        color: #666;
+        font-size: 12px;
+      }
+      .evaluate {
+        color: #a7a7a7;
+        font-size: 12px;
+        padding: 5px 0;
+        b {
+          font-weight: bold;
+          color: #646fb0;
+        }
+      }
+      .shop {
+        color: #a7a7a7;
+        font-size: 12px;
+      }
+    }
+    .grid-content:hover {
+      border-color: #e9e9e9;
+      box-shadow: 0 0 2px 2px #f8f8f8;
     }
   }
 }
