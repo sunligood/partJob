@@ -1,3 +1,4 @@
+https://mp.s7qd.cn/addons/yun_shop/?menu#/home?i=2
 node版本 10.15.3(重点)
 安装 cnpm 命令：
  npm install -g cnpm --registry=https://registry.npm.taobao.org

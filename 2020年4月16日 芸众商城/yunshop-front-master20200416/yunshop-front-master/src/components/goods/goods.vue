@@ -237,6 +237,22 @@
               </van-col>
             </van-col>
           </van-row>
+          <van-row style="padding-bottom:10px">
+          <div class="super-give" v-if="activitySwitch">
+            <div class="l">
+              <tempent v-for="act in activityArr" :key="act.key">
+                 <div v-if="act.key === 'point' || act.key === 'love'">
+                  <span v-for="val in act.value" :key="val">{{val}}<br></span>
+                </div>
+              </tempent>
+              <!-- <span>{{firstActivityCon}}</span>
+              <span>{{activityArr}}</span> -->
+            </div>
+            <div class="r">
+              <span>超级赠送</span>
+            </div>
+          </div>
+          </van-row>
           <!-- vant 1.x版本不支持在row col 添加click事件 -->
           <div @click="gotoMemberGradeList(goodsInfo.member_discount.display_page)">
             <van-row style="background:#f5f5f5;">
@@ -1091,5 +1107,17 @@ export default goods;
       background-color: #f15353;
     }
   }
+}
+// 2020年4月21日
+.super-give {
+  display: flex;
+  align-items: center;
+  background-color: #f15353;
+  width: 94%;
+  margin: 0px auto;
+  padding: 6px 10px;
+  border-radius: 10px;
+  color: #fff;
+  justify-content: space-between;
 }
 </style>
