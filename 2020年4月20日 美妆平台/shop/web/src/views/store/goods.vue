@@ -2,7 +2,7 @@
   <div class="goods">
     <common-title></common-title>
     <div class="c-main">
-      <main-header></main-header>
+      <main-header title="商品详情"></main-header>
       <div class="grid-content bg-purple">
         <div class="img">
           <img src="../../assets/goods1.png" width="260px" />
@@ -22,10 +22,48 @@
           <div class="text-item">
             <span>店&nbsp;铺：</span>神秘商铺
           </div>
-          <el-input-number v-model="buyCount" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
-          <el-button>加入购物车</el-button>
-          <el-button type="primary">立即购买</el-button>
+          <div class="text-item">
+            <span>数&nbsp;量：</span>
+            <el-input-number
+              v-model="buyCount"
+              @change="handleChange"
+              size="small"
+              :min="1"
+              :max="9999"
+            ></el-input-number>
+          </div>
+          <div style="margin:20px 0">
+            <el-button type="primary" @click="buy">立即购买</el-button>
+            <el-button @click="addCar">加入购物车</el-button>
+            <el-button>分享到主页</el-button>
+          </div>
         </div>
+      </div>
+      <div class="bottom-content">
+        <el-tabs type="border-card">
+          <el-tab-pane label="商品详情">
+            <p>硕仔湾 日本代购 champion 衣襟logo 短袖T恤 打底衫 3件套</p>
+          </el-tab-pane>
+          <el-tab-pane label="商品评论">
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="全部" name="all"></el-tab-pane>
+              <el-tab-pane label="好评" name="good"></el-tab-pane>
+              <el-tab-pane label="差评" name="bad"></el-tab-pane>
+              <ul>
+                <li class="user-items">
+                  <div class="l">
+                    <el-avatar icon="el-icon-user-solid"></el-avatar>
+                    <p>sun</p>
+                  </div>
+                  <div class="r">
+                    <p>這是一條評論</p>
+                    <span>2020年4月23日21:05:37</span>
+                  </div>
+                </li>
+              </ul>
+            </el-tabs>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
   </div>
@@ -38,6 +76,7 @@ export default {
   name: 'Goods',
   data() {
     return {
+      activeName: 'all',
       buyCount: 1, // 购买数量
       goodsKey: '', //商品关键词
       goodsList: [] // 商品列表数据
@@ -52,9 +91,19 @@ export default {
     }
   },
   methods: {
-    handleChange () {
-
-    }
+    // 立即购买
+    buy() {
+      this.$router.push('/dopay')
+    },
+    // 加入购物车
+    addCar () {
+      this.$message({
+          message: '添加成功',
+          type: 'success'
+        });
+    },
+    handleChange() {},
+    handleClick() {}
   },
   components: {
     CommonTitle,
@@ -66,7 +115,7 @@ export default {
 .goods {
   .c-main {
     margin: 0 auto;
-    width: 800px;
+    max-width: 800px;
     .grid-content {
       margin-top: 100px;
       display: flex;
@@ -105,6 +154,27 @@ export default {
           padding: 10px 0;
           color: #a7a7a7;
           font-size: 12px;
+        }
+      }
+    }
+    .bottom-content {
+      margin-top: 40px;
+      .user-items {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        .l {
+          margin-right: 30px;
+          text-align: center;
+        }
+        .r {
+          p {
+            padding: 5px 0;
+          }
+          span {
+            font-size: 12px;
+            color: #a7a7a7;
+          }
         }
       }
     }

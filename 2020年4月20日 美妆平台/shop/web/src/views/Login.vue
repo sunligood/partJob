@@ -1,5 +1,10 @@
 <template>
   <div class="login">
+    <div style="text-align:right;padding:10px">
+      <el-button type="success" @click="changePage('/login/1')">用户登录</el-button>
+      <el-button type="success" @click="changePage('/login/2')">商户登录</el-button>
+      <el-button type="success" @click="changePage('/login/3')">管理员登录</el-button>
+    </div>
     <div class="c-mian">
       <h1>{{title}}</h1>
       <el-input v-model="username" placeholder="请输入用户名"></el-input>
@@ -20,27 +25,47 @@ export default {
     }
   },
   created () {
-    let routeParams = this.$route.params
-    console.log(routeParams)
-    this.loginType = routeParams.type
-    switch(this.loginType) {
-      case '1':
-        this.title = '登录'
-        break
-      case '2':
-        this.title = '商户登录'
-        break
-      case '3':
-        this.title = '管理员登录'
-        break
-      default:
-        this.title = '登录'
-        break
-    }
+    this.setType()
   },
   methods: {
     submit () {
-      this.$router.push('/')
+      switch (this.loginType) {
+        case '1':
+          this.title = '登录'
+          break
+        case '2':
+          this.$router.push({path: '/merchant/home', params: {type: 2}})
+          break
+        case '3':
+          this.$router.push({path: '/admin/home', params: {type: 3}})
+          break
+        default:
+          this.title = '登录'
+          break
+      }
+      
+    },
+    changePage (url) {
+      this.$router.push(url)
+      this.setType()
+    },
+    setType () {
+      let routeParams = this.$route.params
+      this.loginType = routeParams.type
+      switch(this.loginType) {
+        case '1':
+          this.title = '登录'
+          break
+        case '2':
+          this.title = '商户登录'
+          break
+        case '3':
+          this.title = '管理员登录'
+          break
+        default:
+          this.title = '登录'
+          break
+      }
     }
   }
 }

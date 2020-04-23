@@ -1,12 +1,15 @@
 <template>
   <div class="main-header">
     <div class="main-title">
-      <h1 class="title">美妆平台</h1>
+      <div class="h1">
+        <h1 class="title" @click="$router.push('/')">美妆平台</h1>
+        <span>{{title}}</span>
+      </div>
       <div class="search">
         <input type="text" v-model="goodsKey" placeholder="请输入商品" />
         <div class="search-btn">搜索</div>
       </div>
-      <div class="shop-car">
+      <div class="shop-car" @click="goCar">
         <span class="count">1</span>
         <i class="el-icon-shopping-cart-2"></i>
         <span class="text">我的购物车</span>
@@ -17,22 +20,43 @@
 
 <script>
 export default {
+  props: {
+    title: {
+      default: ''
+    }
+  },
   data() {
     return {
+      goodsKey: ''
+    }
+  },
+  methods: {
+    goCar () {
+      this.$router.push('/shopCar')
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .main-header {
+  margin-bottom: 40px;
   .main-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin: 20px 0;
+    .h1 {
+      display: flex;
+      align-items: flex-end;
+      span {
+        margin-left: 10px;
+        font-size: 14px;
+      }
+    }
     .title {
       font-size: 35px;
       color: #409eff;
+      cursor: pointer;
     }
     .search {
       flex: 0.7;

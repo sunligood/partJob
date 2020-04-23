@@ -42,7 +42,7 @@ export default {
   background-color: #e3e4e5;
   .c-main {
     margin: 0 auto;
-    width: 800px;
+    max-width: 800px;
     text-align: right;
     font-size: 12px;
     cursor: pointer;

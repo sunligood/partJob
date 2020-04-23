@@ -2,7 +2,7 @@
   <div class="store">
     <common-title></common-title>
     <div class="c-main">
-      <main-header></main-header>
+      <main-header title="商品列表"></main-header>
       <el-row :gutter="20">
         <el-col :span="6" v-for="item in 10" :key="item" @click.native="goGoods(item)">
           <div class="grid-content bg-purple">
@@ -57,7 +57,7 @@ export default {
 .store {
   .c-main {
     margin: 0 auto;
-    width: 800px;
+    max-width: 800px;
     .grid-content {
       height: 280px;
       padding: 10px;
