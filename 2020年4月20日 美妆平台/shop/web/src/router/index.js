@@ -11,6 +11,8 @@ const routes = [
   { path: '/register/:type', name: 'Register', component: () => import('../views/register/Register.vue') },
   // 商品列表
   { path: '/store/:keys', name: 'Store', component: () => import('../views/store/Store.vue') },
+  // 商品详情
+  { path: '/goods/:id', name: 'Goods', component: () => import('../views/store/Goods.vue') },
   { path: '/about', name: 'About', component: () => import('../views/About.vue') }
 ]
 

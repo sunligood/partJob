@@ -6,7 +6,7 @@
 
 <style lang="scss">
 #app {
-  font-family: '微软雅黑';
+  font-family: '????';
   color: #474b50;
 }
 </style>

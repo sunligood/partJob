@@ -1,45 +1,44 @@
 <template>
-  <div class="store">
+  <div class="goods">
     <common-title></common-title>
     <div class="c-main">
-      <div class="main-title">
-        <h1 class="title">美妆平台</h1>
-        <div class="search">
-          <input type="text" v-model="goodsKey" placeholder="请输入商品" />
-          <div class="search-btn">搜索</div>
+      <main-header></main-header>
+      <div class="grid-content bg-purple">
+        <div class="img">
+          <img src="../../assets/goods1.png" width="260px" />
         </div>
-        <div class="shop-car">
-          <span class="count">1</span>
-          <i class="el-icon-shopping-cart-2"></i>
-          <span class="text">我的购物车</span>
+        <div class="detail">
+          <p class="title">这是商品描述这是商品描述这是商品描述这是商品描述</p>
+          <div class="price">
+            <span>价&nbsp;格：</span>
+            <sub>&yen;</sub>2000.00
+          </div>
+          <div class="text-item">
+            <span>库&nbsp;存：</span>10000
+          </div>
+          <div class="text-item">
+            <span>评&nbsp;价：</span>2000.00
+          </div>
+          <div class="text-item">
+            <span>店&nbsp;铺：</span>神秘商铺
+          </div>
+          <el-input-number v-model="buyCount" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+          <el-button>加入购物车</el-button>
+          <el-button type="primary">立即购买</el-button>
         </div>
       </div>
-      <el-row :gutter="20">
-        <el-col :span="6" v-for="item in 10" :key="item">
-          <div class="grid-content bg-purple">
-            <div class="img">
-              <img src="../../assets/goods1.png" width="160px" />
-            </div>
-            <p class="price">&yen;2000.00</p>
-            <p class="title">这是商品描述这是商品描述这是商品描述这是商品描述</p>
-            <p class="evaluate">
-              已有
-              <b>11</b>人评价
-            </p>
-            <p class="shop">神秘商铺</p>
-          </div>
-        </el-col>
-      </el-row>
     </div>
   </div>
 </template>
 
 <script>
 import CommonTitle from '../../components/CommonTitle'
+import MainHeader from '../../components/MainHeader'
 export default {
-  name: 'Store',
+  name: 'Goods',
   data() {
     return {
+      buyCount: 1, // 购买数量
       goodsKey: '', //商品关键词
       goodsList: [] // 商品列表数据
     }
@@ -52,119 +51,62 @@ export default {
       this.goodsKey = routeParams.keys
     }
   },
-  methods: {},
+  methods: {
+    handleChange () {
+
+    }
+  },
   components: {
-    CommonTitle
+    CommonTitle,
+    MainHeader
   }
 }
 </script>
 <style lang="scss" scoped>
-.store {
+.goods {
   .c-main {
     margin: 0 auto;
     width: 800px;
-    .main-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 20px 0;
-      .title {
-        font-size: 35px;
-        color: #409eff;
-      }
-      .search {
-        flex: 0.7;
-        display: flex;
-        align-items: center;
-        border: 2px solid #409eff;
-        .search-btn {
-          width: 50px;
-          padding: 0 10px;
-          line-height: 33px;
-          text-align: center;
-          background-color: #409eff;
-          font-size: 14px;
-          color: #fff;
-          cursor: pointer;
-        }
-        input {
-          width: 100%;
-          height: 26px;
-          border: 0;
-          outline: none;
-          padding-left: 10px;
-        }
-      }
-      .shop-car {
-        position: relative;
-        width: 120px;
-        height: 35px;
-        line-height: 35px;
-        text-align: center;
-        border: 1px solid #eee;
-        cursor: pointer;
-        span {
-          font-size: 14px;
-          color: #409eff;
-        }
-        .el-icon-shopping-cart-2 {
-          font-size: 20px;
-        }
-        .count {
-          position: absolute;
-          left: 23px;
-          top: 2px;
-          width: 14px;
-          height: 14px;
-          line-height: 14px;
-          border-radius: 50%;
-          background-color: #409eff;
-          font-size: 12px;
-          color: #fff;
-        }
-        .text {
-          margin-left: 10px;
-        }
-      }
-      .shop-car:hover {
-        border-color: #409eff;
-      }
-    }
     .grid-content {
-      height: 280px;
-      padding: 10px;
-      border: 1px solid #fff;
-      cursor: pointer;
-      transition: border-color 0.2s ease;
+      margin-top: 100px;
+      display: flex;
+      justify-content: end;
       .img {
+        padding: 30px;
         text-align: center;
+        cursor: pointer;
+        border: 1px solid #eee;
+        transition: border-color 0.2s ease;
       }
-      .price {
-        padding: 5px 0;
-        color: #e4393c;
-        font-size: 20px;
+      .img:hover {
+        border-color: #e9e9e9;
+        box-shadow: 0 0 2px 2px #f8f8f8;
       }
-      .title {
-        color: #666;
-        font-size: 12px;
-      }
-      .evaluate {
-        color: #a7a7a7;
-        font-size: 12px;
-        padding: 5px 0;
-        b {
-          font-weight: bold;
-          color: #646fb0;
+      .detail {
+        margin-left: 20px;
+        .title {
+          color: #666;
+          font-size: 20px;
+          letter-spacing: 1px;
+        }
+        .price {
+          padding: 10px 0;
+          color: #e4393c;
+          font-size: 20px;
+          span {
+            font-size: 12px;
+            color: #a7a7a7;
+          }
+          sub {
+            font-size: 12px;
+          }
+        }
+        .text-item {
+          padding: 10px 0;
+          color: #a7a7a7;
+          font-size: 12px;
         }
       }
-      .shop {
-        color: #a7a7a7;
-        font-size: 12px;
-      }
-    }
-    .grid-content:hover {
-      border-color: #e9e9e9;
-      box-shadow: 0 0 2px 2px #f8f8f8;
     }
   }
 }
