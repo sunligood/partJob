@@ -894,6 +894,15 @@
         <div v-if="isRent && !isCup" class="buy cell">
           <div :class="{ nocar: !isGoods }" v-if="!is_o2o" @click="buyNow">立即租</div>
         </div>
+        <div class="commission-tips" v-if="activitySwitch">
+          <div>
+            <tempent v-for="act in activityArr" :key="act.key">
+                 <div v-if="act.key === 'commission'">
+                  <span v-for="val in act.value" :key="val">{{val}}<br></span>
+                </div>
+              </tempent>
+          </div>
+        </div>
       </div>
       <!-- <div :class="{bottomMargin:isMarginBottom}"></div> -->
       <!--      <div style="height:3.125rem;"></div>-->
@@ -1119,5 +1128,37 @@ export default goods;
   border-radius: 10px;
   color: #fff;
   justify-content: space-between;
+}
+// 2020年4月23日
+.commission-tips {
+  position: fixed;
+  right: .5rem;
+  bottom: 4rem;
+  div {
+    padding: 4px 8px;
+    z-index: 999;
+    opacity: 0.9;
+    background-color: #fcd6d6;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #ed0606;
+    &:before,
+		&:after	{
+		  content: "";
+		  position: absolute;
+		  z-index: 1000;
+		  bottom: -4px;
+		  left: 50%;
+		  margin-left: -6px;
+		  border-top: 6px solid #fcd6d6;
+		  border-left: 6px solid transparent;
+		  border-right: 6px solid transparent;
+		  border-bottom: 0;
+    }
+    &:before{
+		  border-top-color: #fcd6d6;
+		  bottom: -6px;
+		}
+  }
 }
 </style>
