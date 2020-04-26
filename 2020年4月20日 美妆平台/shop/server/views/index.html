@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <style>
+    .avatar-uploader .el-upload {
+      border: 1px dashed #d9d9d9;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-uploader .el-upload:hover {
+      border-color: #409EFF;
+    }
+
+    .avatar-uploader-icon {
+      font-size: 28px;
+      color: #8c939d;
+      width: 178px;
+      height: 178px;
+      line-height: 178px;
+      text-align: center;
+    }
+
+    .avatar {
+      width: 178px;
+      height: 178px;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <el-button type="primary" @click="login">登录</el-button>
+    <el-button type="primary" @click="addStu">添加用户</el-button>
+    <el-button type="primary" @click="queryStu">查询用户</el-button>
+    <el-button type="primary" @click="deleteStu">删除用户</el-button>
+    <el-button type="primary" @click="updateStu">修改用户</el-button>
+    <el-button type="primary" @click="queryStuClass">班级通讯录</el-button>
+    <el-button type="primary" @click="addMsg">新增留言</el-button>
+    <el-button type="primary" @click="deleteMsg">刪除留言</el-button>
+    <el-button type="primary" @click="queryMsg">查詢留言</el-button>
+    <el-button type="primary" @click="deleteClassAlbum">删除照片</el-button>
+    <el-button type="primary" @click="queryClassAlbum">查询照片</el-button>
+
+    <p>班级相册上传：</p>
+    <el-upload class="avatar-uploader" action="http://localhost:3000/addClassAlbum" :show-file-list="false"
+      :data='flileData' :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+      <img v-if="imageUrl" :src="imageUrl" class="avatar">
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </el-upload>
+    <img v-for="url in image " :src="url.url" alt="">
+    <p>个人头像上传：</p>
+    <el-upload class="avatar-uploader" action="http://localhost:3000/personalImg" :show-file-list="false"
+      :data='{userID: 6}' :on-success="handleAvatarSuccess2" :before-upload="beforeAvatarUpload2">
+      <img v-if="imageUrl2" :src="imageUrl2" class="avatar">
+      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+    </el-upload>
+  </div>
+</body>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script src="/public/lib/axios.js"></script>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script type="text/javascript">
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      imageUrl: '',
+      imageUrl2: '',
+      image: [],
+      flileData: {}
+    },
+    methods: {
+      // 查看照片
+      queryClassAlbum() {
+        let params = {
+          // 不传 全部查询
+        }
+        axios.post('http://localhost:3000/queryClassAlbum', params)
+          .then(res => {
+            this.image.push(res.data.data[0])
+          })
+      },
+      // 删除照片
+      deleteClassAlbum() {
+        let params = {
+          imgID: [2, 3]
+        }
+        axios.post('http://localhost:3000/deleteClassAlbum', params)
+          .then(res => {
+          })
+      },
+      // 新增留言
+      addMsg() {
+        let params = {
+          author: '孙力',
+          sex: '男',
+          systems: '计算机系',
+          major: '网页设计',
+          class: '7班',
+          mobile: '13212504130',
+          email: '13212504130@163.com',
+          content: '這是一條Asdasd',
+          createdDate: '2020年4月25日11:08:39'
+        }
+        axios.post('http://localhost:3000/addMessage', params)
+          .then(res => {
+          })
+      },
+      // 删除留言
+      deleteMsg() {
+        let params = {
+          msgID: [2, 3, 4]
+        }
+        axios.post('http://localhost:3000/deleteMessage', params)
+          .then(res => {
+          })
+      },
+      // 查询留言
+      queryMsg() {
+        let params = {
+          systems: '计算机系',
+          major: '网页设计',
+          class: '7班'
+        }
+        axios.post('http://localhost:3000/queryMessage', params)
+          .then(res => {
+          })
+      },
+      // 登录
+      login() {
+        let params = {
+          name: 'admin',
+          password: '123456'
+        }
+        axios.post('http://localhost:3100/register', params)
+          .then(res => {
+          })
+      },
+      // 添加用户
+      addStu() {
+        let params = {
+          name: '孙力',
+          password: '123',
+          sex: '男',
+          emp_no: '20140831',
+          root: '0',
+          systems: '计算机系',
+          major: '网页设计',
+          class: '7班',
+          mobile: '13212504130',
+          email: '13212504130@163.com',
+          address: '重庆市万州区',
+        }
+        axios.post('http://localhost:3000/addStu', params)
+          .then(res => {
+          })
+      },
+      // 查询用户
+      queryStu() {
+        axios.post('http://localhost:3000/queryStu')
+          .then(res => {
+          })
+      },
+      // 查询班级用户
+      queryStuClass() {
+        axios.post('http://localhost:3000/queryStu', { systems: '计算机系', major: '网页设计', class: '7班', })
+          .then(res => {
+          })
+      },
+      // 删除用户
+      deleteStu() {
+        axios.post('http://localhost:3000/deleteStu', { userID: 5 })
+          .then(res => {
+          })
+      },
+      // 修改用户
+      updateStu() {
+        let params = {
+          userID: 6,
+          type: 'stu',
+          address: '奥术大师多'
+        }
+        axios.post('http://localhost:3000/updateStu', params)
+          .then(res => {
+          })
+      },
+      handleAvatarSuccess(res, file) {
+        console.log(file)
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      // 图片上传
+      beforeAvatarUpload(file) {
+        const isJPG = file.type === 'image/png' || 'image/jpg';
+        const isLt10M = file.size / 1024 / 1024 < 10;
+
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG 格式!');
+        }
+        if (!isLt10M) {
+          this.$message.error('上传图片大小不能超过 10MB!');
+        }
+        // 附件请求参数
+        this.flileData = {
+          author: '孙力',
+          systems: '计算机系',
+          major: '网页设计',
+          class: '7班',
+          createdDate: '2020-01-02'
+        }
+        return isJPG && isLt10M;
+      },
+      handleAvatarSuccess2(res, file) {
+        console.log(file)
+        this.imageUrl2 = URL.createObjectURL(file.raw);
+      },
+      // 图片上传
+      beforeAvatarUpload2(file) {
+        const isJPG = file.type === 'image/png' || 'image/jpg';
+        const isLt10M = file.size / 1024 / 1024 < 10;
+
+        if (!isJPG) {
+          this.$message.error('上传图片只能是 JPG 格式!');
+        }
+        if (!isLt10M) {
+          this.$message.error('上传图片大小不能超过 10MB!');
+        }
+        // 附件请求参数
+        this.flileData1 = {
+          userID: 6
+        }
+        return isJPG && isLt10M;
+      }
+    },
+    mounted() {
+      // axios.post('http://localhost:3000/queryClassAlbum', {})
+      //     .then(res => {
+      //       console.log(res)
+      //       this.image = res.data.responseObject
+      //     })
+    }
+  })
+</script>
+
+</html>

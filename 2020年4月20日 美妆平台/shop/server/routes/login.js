@@ -2,13 +2,9 @@ const express = require('express')
 const router = express.Router()
 const {mysql, sqlFormat} = require('../mysql/index')
 
-router.get('/', (req, res) => {
-  res.render('signin')
-})
-
 router.post('/', (req, res) => {
   let body = req.body
-  let sql = `select * from userInfo where username = '${body.username}'`
+  let sql = `select * from user_db where name = '${body.name}' and password = '${body.password}'`
   mysql.query(sql, (err, result) => {
     result = sqlFormat(result)
     if (err) {
@@ -21,13 +17,6 @@ router.post('/', (req, res) => {
     if (result.length === 0) {
       res.send({
         code: 0,
-        msg: '账号未注册'
-      })
-      return
-    }
-    if (result.length === 1 && result[0].password !== body.password) {
-      res.send({
-        code: 0,
         msg: '用户名或密码错误'
       })
       return
@@ -35,7 +24,7 @@ router.post('/', (req, res) => {
     res.send({
       code: 1,
       msg: '登录成功',
-      responseObject: result[0]
+      data: result[0]
     })
   })
 })

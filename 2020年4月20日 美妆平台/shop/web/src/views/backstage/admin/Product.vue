@@ -1,6 +1,6 @@
 <template>
   <div class="admin-product">
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="tableData" border style="width: 100%">
       <el-table-column label="商品名">
         <template slot-scope="scope">
           <span>{{ scope.row.date }}</span>
@@ -19,8 +19,8 @@
       <el-table-column label="商铺">
         <template slot-scope="scope">
           <div slot="reference" class="name-wrapper">
-              <el-tag size="medium">{{ scope.row.name }}</el-tag>
-            </div>
+            <el-tag size="medium">{{ scope.row.name }}</el-tag>
+          </div>
         </template>
       </el-table-column>
       <el-table-column label="操作">
@@ -76,5 +76,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .admin-product {
+  padding: 10px;
 }
 </style>

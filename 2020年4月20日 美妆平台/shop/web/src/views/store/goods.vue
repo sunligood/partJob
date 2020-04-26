@@ -96,11 +96,11 @@ export default {
       this.$router.push('/dopay')
     },
     // 加入购物车
-    addCar () {
+    addCar() {
       this.$message({
-          message: '添加成功',
-          type: 'success'
-        });
+        message: '添加成功',
+        type: 'success'
+      })
     },
     handleChange() {},
     handleClick() {}
@@ -119,7 +119,7 @@ export default {
     .grid-content {
       margin-top: 100px;
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
       .img {
         padding: 30px;
         text-align: center;
@@ -161,7 +161,7 @@ export default {
       margin-top: 40px;
       .user-items {
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         align-items: center;
         .l {
           margin-right: 30px;

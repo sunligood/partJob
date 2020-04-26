@@ -1,7 +1,7 @@
 <template>
   <div class="common-title">
     <div class="c-main">
-      <a v-if="!isLogin" href="javascript:;">{{title}}</a>
+      <a v-if="!isLogin" @click="login" href="javascript:;">{{title}}</a>
       <span v-else>
         <a href="javascript:;" @click="login">{{title}}</a>&nbsp;
         <a href="javascript:;" @click="login">{{title}}</a>&nbsp;
@@ -10,7 +10,6 @@
         <a href="javascript:;" @click="login">{{title}}</a>&nbsp;
         <a href="javascript:;" @click="login">{{title}}</a>&nbsp;
       </span>
-      
     </div>
   </div>
 </template>
@@ -23,13 +22,13 @@ export default {
       default: '请先登录'
     }
   },
-  data () {
+  data() {
     return {
       isLogin: false
     }
   },
   methods: {
-    login () {
+    login() {
       this.$router.push('/login/1')
     }
   }
@@ -50,7 +49,7 @@ export default {
       color: #999;
       text-decoration: none;
       &:hover {
-        color: #409EFF;
+        color: #409eff;
       }
     }
   }
