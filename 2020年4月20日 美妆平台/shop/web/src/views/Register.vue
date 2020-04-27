@@ -3,7 +3,7 @@
     <i class="el-icon-back" @click="back"></i>
     <div class="c-mian">
       <h1>{{title}}</h1>
-      <el-input v-model="username" placeholder="请输入用户名"></el-input>
+      <el-input v-model="userName" placeholder="请输入用户名"></el-input>
       <el-input v-if="registerType == '2'" v-model="storeName" placeholder="请输入商铺名"></el-input>
       <el-input v-if="registerType == '2'" v-model="mobile" placeholder="联系电话"></el-input>
       <el-input v-if="registerType == '2'" v-model="address" placeholder="地址"></el-input>
@@ -19,7 +19,7 @@ export default {
     return {
       title: '注册', //标题
       registerType: '1', // 登录类型 1用户， 2商户
-      username: '', // 登录用户名
+      userName: '', // 登录用户名
       email: '', // 邮箱
       mobile: '', // 电话
       storeName: '', // 商铺名
@@ -36,19 +36,39 @@ export default {
   },
   methods: {
     sumbit() {
-      // let params = {
-      //   userType: this.registerType, // 登录类型 1用户， 2商户
-      //   username: this.username, // 登录用户名
-      //   email: this.email, // 邮箱
-      //   mobile: this.mobile, // 电话
-      //   storeName: this.storeName, // 商铺名
-      //   address: this.address, // 地址
-      //   password: this.password // 登录密码
-      // }
-      this.$axios.defaults.baseURL = ''
-      this.$axios.post('/register').then(res => {
-        console.log(res)
-      })
+      let params = {
+        userType: this.registerType, // 登录类型 1用户， 2商户
+        userName: this.userName, // 登录用户名
+        email: this.email, // 邮箱
+        mobile: this.mobile, // 电话
+        storeName: this.storeName, // 商铺名
+        address: this.address, // 地址
+        password: this.password // 登录密码
+      }
+      if (!params.userName || !params.email || !params.password) {
+        this.$message.error('请填写完整信息')
+        return
+      }
+      if (
+        params.userType === '2' &&
+        (!params.mobile || !params.storeName || !params.address)
+      ) {
+        this.$message.error('请填写完整信息')
+        return
+      }
+      this.$axios
+        .post('/register', params)
+        .then(res => {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'success'
+          })
+          this.$router.push({ path: `/login/${params.userType}` })
+        })
+        .catch(err => {
+          this.$message.error(err)
+        })
     },
     back() {
       this.$router.back()

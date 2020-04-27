@@ -4,6 +4,10 @@ module.exports = function (app) {
   // 注册
   app.use('/register', require('./register'))
 
+  // 新增商品
+  app.use('/addPrd', require('./addPrd'))
+  // 查询商品
+  app.use('/queryPrd', require('./queryPrd'))
 
   // 用户注册（管理员权限）
   app.use('/addStu', require('./addStu'))
@@ -23,10 +27,6 @@ module.exports = function (app) {
   // 删除留言
   app.use('/deleteMessage', require('./deleteMessage'))
 
-  // 相册上传
-  app.use('/addClassAlbum', require('./addClassAlbum'))
-  // 相册查询
-  app.use('/queryClassAlbum', require('./queryClassAlbum'))
   // 相册查询
   app.use('/deleteClassAlbum', require('./deleteClassAlbum'))
   // 个人头像上传

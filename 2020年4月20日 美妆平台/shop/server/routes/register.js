@@ -6,14 +6,14 @@ router.post('/', (req, res) => {
   let body = req.body
   let sqlVal = []
   let sql = ''
-  if (body.userType === 1) {
+  if (body.userType === '1') {
     // 用户注册
-    sqlVal = [body.userName, body.password, body.email]
-    sql = `insert into user_db(userName,password,email) values (?,?,?)`
-  } else if (body.userType === 2) {
+    sqlVal = [body.userType, body.userName, body.password, body.email]
+    sql = `insert into user_db(userType,userName,password,email) values (?,?,?,?)`
+  } else if (body.userType === '2') {
     // 商户注册
-    sqlVal = [body.userName, body.password, body.email, body.storeName, body.mobile, body.address]
-    sql = `insert into user_db(userName,password,email,storeName,mobile,address) values (?,?,?,?,?,?)`
+    sqlVal = [body.userType, body.userName, body.password, body.email, body.storeName, body.mobile, body.address]
+    sql = `insert into user_db(userType,userName,password,email,storeName,mobile,address) values (?,?,?,?,?,?,?)`
   }
   isRename(body.userName)
     .then(() => {
@@ -39,7 +39,7 @@ router.post('/', (req, res) => {
 // 检查是否重复
 function isRename(userName) {
   return new Promise((resolve, reject) => {
-    let sql = `select * from user_db where userName=${userName}`
+    let sql = `select * from user_db where userName='${userName}'`
     mysql.query(sql, (err, result) => {
       result = sqlFormat(result)
       if (err) {

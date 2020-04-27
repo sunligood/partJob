@@ -7,13 +7,13 @@
     </div>
     <div class="c-mian">
       <h1>{{title}}</h1>
-      <el-input v-model="username" placeholder="请输入用户名"></el-input>
+      <el-input v-model="userName" placeholder="请输入用户名"></el-input>
       <el-input v-model="password" :type="'password'" placeholder="请输入密码"></el-input>
       <el-button type="success" @click="submit">登录</el-button>
       <router-link
-        v-if="loginType !== '3'"
+        v-if="userType !== '3'"
         class="register"
-        :to="{path: '/register/'+ loginType}"
+        :to="{path: '/register/'+ userType}"
       >立即注册</router-link>
     </div>
   </div>
@@ -23,8 +23,8 @@ export default {
   data() {
     return {
       title: '登录', //标题
-      loginType: '1', // 登录类型 1用户， 2商户， 3管理员
-      username: '', // 登录用户名
+      userType: '1', // 登录类型 1用户， 2商户， 3管理员
+      userName: '', // 登录用户名
       password: '' // 登录密码
     }
   },
@@ -33,13 +33,35 @@ export default {
   },
   methods: {
     submit() {
-      switch (this.loginType) {
+      let params = {
+        userName: this.userName,
+        password: this.password,
+        userType: this.userType
+      }
+      this.$axios
+        .post('/login', params)
+        .then(res => {
+          this.$message({
+            showClose: true,
+            message: res.msg,
+            type: 'success'
+          })
+          // 储存登录信息
+          this.$store.commit('saveUserInfo', res.data)
+          this.goPage()
+        })
+        .catch(err => {
+          this.$message.error(err)
+        })
+    },
+    goPage() {
+      switch (this.userType) {
         case '1':
           this.title = '登录'
           this.$router.push({ path: '/' })
           break
         case '2':
-          this.$router.push({ path: '/merchant/home', params: { type: 2 } })
+          this.$router.replace({ path: '/merchant/home', params: { type: 2 } })
           break
         case '3':
           this.$router.push({ path: '/admin/home', params: { type: 3 } })
@@ -55,8 +77,8 @@ export default {
     },
     setType() {
       let routeParams = this.$route.params
-      this.loginType = routeParams.type
-      switch (this.loginType) {
+      this.userType = routeParams.type
+      switch (this.userType) {
         case '1':
           this.title = '登录'
           break

@@ -1,8 +1,11 @@
 <template>
-  <div class="admin-home">
+  <div class="admin-home" v-if="userInfo">
     <div class="header">
       <h1>美妆平台后台管理系统-商铺</h1>
-      <span>欢迎，sunli</span>
+      <div class="r">
+        <span>欢迎, {{userInfo.userName}}</span>
+        <span @click="back">退出</span>
+      </div>
     </div>
     <el-row class="tac">
       <el-col :span="1">
@@ -40,14 +43,22 @@ export default {
   name: 'AdminHome',
   data() {
     return {
-      goodsKey: '', //商品关键词
-      goodsList: [] // 商品列表数据
+      userInfo: this.$store.state.userInfo
     }
   },
   created() {
-    this.$router.push('/merchant/user')
+    if (!this.userInfo) {
+      this.$router.push('/login/2')
+      this.$message.error('请先登录')
+    } else {
+      this.$router.replace('/merchant/user')
+    }
   },
   methods: {
+    back() {
+      this.$router.push('/login/2')
+      this.$store.state.userInfo = null
+    },
     select(index) {
       console.log(index)
       switch (index) {
@@ -71,20 +82,40 @@ export default {
 <style lang="scss" scoped>
 .admin-home {
   .header {
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    top: 0;
     display: flex;
     justify-content: space-between;
     padding: 20px 30px;
     background-color: #304156;
     color: #fff;
+    .r {
+      font-size: 14px;
+      span:last-child {
+        display: inline-block;
+        margin-left: 10px;
+        cursor: pointer;
+        &:hover {
+          opacity: 0.6;
+        }
+      }
+    }
+    .el-link--inner {
+      color: #fff;
+    }
   }
   .el-menu-vertical {
     position: fixed;
+    top: 56px;
     width: 150px;
     height: 100%;
   }
   .children-c {
     width: calc(100% - 150px);
     margin-left: 150px;
+    margin-top: 30px;
   }
 }
 </style>

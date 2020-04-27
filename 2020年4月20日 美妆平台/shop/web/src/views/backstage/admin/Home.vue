@@ -45,7 +45,7 @@ export default {
     }
   },
   created() {
-    this.$router.push('/admin/product')
+    this.$router.replace('/admin/product')
   },
   methods: {
     select(index) {

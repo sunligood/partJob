@@ -1,10 +1,10 @@
 <template>
   <div class="merchant-user">
     <el-avatar icon="el-icon-user-solid"></el-avatar>
-    <p>商铺名称： xxxx</p>
-    <p>电话： xxxx</p>
-    <p>邮箱： xxxx</p>
-    <p>地址： xxxx</p>
+    <p>商铺名称： {{userInfo.storeName}}</p>
+    <p>电话： {{userInfo.mobile}}</p>
+    <p>邮箱： {{userInfo.email}}</p>
+    <p>地址： {{userInfo.address}}</p>
   </div>
 </template>
 
@@ -13,11 +13,11 @@ export default {
   name: 'MerchantUser',
   data() {
     return {
+      userInfo: this.$store.state.userInfo
     }
   },
   created() {},
-  methods: {
-  },
+  methods: {},
   components: {}
 }
 </script>

@@ -1,16 +1,16 @@
 const express = require('express')
 const router = express.Router()
-const {mysql, sqlFormat} = require('../mysql/index')
+const { mysql, sqlFormat } = require('../mysql/index')
 
 router.post('/', (req, res) => {
   let body = req.body
-  let sql = `select * from user_db where name = '${body.name}' and password = '${body.password}'`
+  let sql = `select * from user_db where userName = '${body.userName}' and password = '${body.password}' and userType = '${body.userType}'`
   mysql.query(sql, (err, result) => {
     result = sqlFormat(result)
     if (err) {
       res.send({
         code: 0,
-        msg: err
+        msg: err.sqlMessage
       })
       return
     }
