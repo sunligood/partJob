@@ -17,6 +17,14 @@ const routes = [
   { path: '/shopCar', name: 'ShopCar', component: () => import('../views/store/ShopCar.vue') },
   // 结算页面
   { path: '/dopay', name: 'Dopay', component: () => import('../views/Dopay.vue') },
+  // 个人中心
+  {
+    path: '/user', name: 'User', component: () => import('../views/user/User.vue'),
+    children: [
+      { path: '/user/center', name: 'UserCenter', component: () => import('../views/user/Center.vue') },
+      { path: '/user/order', name: 'UserOrder', component: () => import('../views/user/Order.vue') }
+    ]
+  },
   // 后台管理员-首页
   {
     path: '/admin/home', name: 'AdminHome', component: () => import('../views/backstage/admin/Home.vue'),
@@ -32,7 +40,8 @@ const routes = [
     children: [
       { path: '/merchant/product', name: 'MerchantProduct', component: () => import('../views/backstage/merchant/Product.vue') },
       { path: '/merchant/user', name: 'MerchantUser', component: () => import('../views/backstage/merchant/User.vue') },
-      { path: '/merchant/list', name: 'MerchantList', component: () => import('../views/backstage/merchant/List.vue') }
+      { path: '/merchant/list', name: 'MerchantList', component: () => import('../views/backstage/merchant/List.vue') },
+      { path: '/merchant/detail/:id', name: 'MerchantDetail', component: () => import('../views/backstage/merchant/PrdDetail.vue') }
     ]
   }
 ]

@@ -1,21 +1,21 @@
 const express = require('express')
 const router = express()
-const {mysql} = require('../mysql/index')
+const { mysql } = require('../mysql/index')
 
 router.post('/', (req, res) => {
   let data = req.body
-  let sql = `delete from user_db where userID=${data.userID}`
+  let sql = `delete from prd_db where prdID=${data.prdID}`
   mysql.query(sql, (err) => {
     if (err) {
       res.send({
         code: 0,
-        msg: err
+        msg: err.sqlMessage
       })
       return
     }
     res.send({
       code: 1,
-      msg: '删除成功'
+      msg: '下架成功'
     })
   })
 })

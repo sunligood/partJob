@@ -4,20 +4,28 @@
     <div class="c-main">
       <main-header title="购物车"></main-header>
       <el-divider></el-divider>
-      <div class="p-list">
-        <div v-for="items in 4" :key="items">
+      <div class="p-list" v-if="list.length">
+        <div v-for="(items, index) in list" :key="index" @click="goGoods(items.prdID)">
           <div class="p-item">
-            <img src="../../assets/goods1.png" width="100px" height="100px" />
-            <p class="name">内存条，金士顿，十全 2666</p>
-            <p class="price">&yen;200.00{{items}}</p>
-            <p class="count">x1</p>
-            <el-link type="danger" @click="remove">删除</el-link>
+            <img :src="items.imgUrl" width="100px" height="100px" />
+            <p class="name">{{items.prdName}}</p>
+            <p class="price">&yen;{{items.price}}</p>
+            <p class="count">x{{items.buyCount}}</p>
+            <el-link type="danger" @click.stop="remove(index)">删除</el-link>
           </div>
           <el-divider></el-divider>
         </div>
       </div>
-      <div class="bottom">
-        <span>总价： 2000元</span>
+      <div v-if="!list.length && userInfo" style="padding:150px 0;text-align:center">
+        <i class="el-icon-shopping-cart-2" style="display:block;font-size:50px"></i>
+        <el-link href="http://localhost:8080/#/store/all">空空如也~ 去购物吧</el-link>
+      </div>
+      <div v-if="!userInfo" style="padding:150px 0;text-align:center">
+        <i class="el-icon-shopping-cart-2" style="display:block;font-size:50px"></i>
+        <el-link href="http://localhost:8080/#/login/1">亲~ 请先登录</el-link>
+      </div>
+      <div v-if="list.length" class="bottom">
+        <span>总价： {{sumPrice}}元</span>
         <el-button type="primary" @click="dopay">结算</el-button>
       </div>
     </div>
@@ -31,42 +39,47 @@ export default {
   name: 'ShopCar',
   data() {
     return {
-      address: ''
+      address: '',
+      list: this.$store.state.shopCar,
+      userInfo: this.$store.state.userInfo
     }
   },
-  created() {
-    let routeParams = this.$route.params
-    if (routeParams.keys === 'all') {
-      this.goodsKey = ''
-    } else if (routeParams.keys) {
-      this.goodsKey = routeParams.keys
+  computed: {
+    sumPrice() {
+      if (this.list) {
+        let sum = 0
+        this.list.forEach(item => {
+          sum = sum + Number(item.price) * Number(item.buyCount)
+        })
+        return sum.toFixed(2)
+      }
+      return 0
     }
   },
+  created() {},
   methods: {
     // 支付
     dopay() {
+      this.$store.state.payList = this.list
       this.$router.push('/doPay')
     },
     // 删除订单
-    remove() {
+    remove(index) {
       this.$confirm('是否删除改商品?', '提示', {
         confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
-        center: true
+        cancelButtonText: '取消'
       })
         .then(() => {
+          this.$store.state.shopCar.splice(index, 1)
           this.$message({
             type: 'success',
             message: '删除成功!'
           })
         })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+        .catch(() => {})
+    },
+    goGoods(id) {
+      this.$router.push('/goods/' + id)
     }
   },
   components: {

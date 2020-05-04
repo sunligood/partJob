@@ -8,12 +8,12 @@ router.post('/', (req, res) => {
   let sql = ''
   if (body.userType === '1') {
     // 用户注册
-    sqlVal = [body.userType, body.userName, body.password, body.email]
-    sql = `insert into user_db(userType,userName,password,email) values (?,?,?,?)`
+    sqlVal = [body.userType, body.userName, body.password, body.email, body.isAuthority, body.money]
+    sql = `insert into user_db(userType,userName,password,email,isAuthority,money) values (?,?,?,?,?,?)`
   } else if (body.userType === '2') {
     // 商户注册
-    sqlVal = [body.userType, body.userName, body.password, body.email, body.storeName, body.mobile, body.address]
-    sql = `insert into user_db(userType,userName,password,email,storeName,mobile,address) values (?,?,?,?,?,?,?)`
+    sqlVal = [body.userType, body.userName, body.password, body.email, body.storeName, body.mobile, body.address, body.isAuthority]
+    sql = `insert into user_db(userType,userName,password,email,storeName,mobile,address,isAuthority) values (?,?,?,?,?,?,?,?)`
   }
   isRename(body.userName)
     .then(() => {

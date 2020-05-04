@@ -1,24 +1,9 @@
-# web
+## 初始化
 
-## Project setup
-```
-npm install
-```
+启动服务端： cd server:  npm i  或 cnpm i 初始化完成后->     node app.js
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+启动前端： cd web:  npm i  或 cnpm i 初始化完成后->     npm run serve
 
-### Compiles and minifies for production
-```
-npm run build
-```
+访问首页： http://localhost:8080/#/
 
-### Lints and fixes files
-```
-npm run lint
-```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

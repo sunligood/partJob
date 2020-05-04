@@ -7,10 +7,10 @@
       </div>
       <div class="search">
         <input type="text" v-model="goodsKey" placeholder="请输入商品" />
-        <div class="search-btn">搜索</div>
+        <div class="search-btn" @click="search">搜索</div>
       </div>
       <div class="shop-car" @click="goCar">
-        <span class="count">1</span>
+        <span class="count">{{shopCarCount}}</span>
         <i class="el-icon-shopping-cart-2"></i>
         <span class="text">我的购物车</span>
       </div>
@@ -25,13 +25,25 @@ export default {
       default: ''
     }
   },
+  computed: {
+    shopCarCount() {
+      return this.$store.state.shopCar.length
+    }
+  },
   data() {
     return {
       goodsKey: ''
     }
   },
   methods: {
-    goCar () {
+    search() {
+      if (this.goodsKey === '') {
+        return
+      }
+      this.$emit('search', this.goodsKey)
+      this.$router.push('/store/' + this.goodsKey)
+    },
+    goCar() {
       this.$router.push('/shopCar')
     }
   }

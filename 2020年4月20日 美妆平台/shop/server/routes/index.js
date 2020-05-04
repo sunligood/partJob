@@ -3,32 +3,39 @@ module.exports = function (app) {
   app.use('/login', require('./login'))
   // 注册
   app.use('/register', require('./register'))
+  // 查询用户
+  app.use('/queryUser', require('./queryUser'))
+  // 更新用户
+  app.use('/updateUser', require('./updateUser'))
 
   // 新增商品
   app.use('/addPrd', require('./addPrd'))
   // 查询商品
   app.use('/queryPrd', require('./queryPrd'))
+  // 下架商品
+  app.use('/deletePrd', require('./deletePrd'))
 
-  // 用户注册（管理员权限）
-  app.use('/addStu', require('./addStu'))
-  // 查询用户
-  app.use('/queryStu', require('./queryStu'))
-  // 用户信息修改
-  app.use('/updateStu', require('./updateStu'))
-  // 用户信息修改
-  app.use('/deleteStu', require('./deleteStu'))
+  // 查询商品交易
+  app.use('/queryDeal', require('./queryDeal'))
+  // 新增商品交易
+  app.use('/addDeal', require('./addDeal'))
+  // 删除商品交易
+  app.use('/deleteDeal', require('./deleteDeal'))
 
-  // 新增留言
-  app.use('/addMessage', require('./addMessage'))
-  // 查询留言
-  app.use('/queryMessage', require('./queryMessage'))
-  // 更新留言
-  app.use('/updateMessage', require('./updateMessage'))
-  // 删除留言
-  app.use('/deleteMessage', require('./deleteMessage'))
+  // 商品评价
+  app.use('/discuss', require('./discuss'))
 
-  // 相册查询
-  app.use('/deleteClassAlbum', require('./deleteClassAlbum'))
+  // 商品分享
+  app.use('/share', require('./share'))
+
+
+
+
+
+
+
+
+
   // 个人头像上传
   app.use('/personalImg', require('./personalImg'))
 }

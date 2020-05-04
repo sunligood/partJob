@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <div style="text-align:right;padding:10px">
+      <el-button type="success" @click="changePage('/')">首页</el-button>
       <el-button type="success" @click="changePage('/login/1')">用户登录</el-button>
       <el-button type="success" @click="changePage('/login/2')">商户登录</el-button>
       <el-button type="success" @click="changePage('/login/3')">管理员登录</el-button>

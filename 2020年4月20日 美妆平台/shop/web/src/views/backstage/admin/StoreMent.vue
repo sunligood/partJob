@@ -1,78 +1,140 @@
 <template>
   <div class="admin-store">
-    <el-table :data="tableData" style="width: 100%">
-      <el-table-column label="商铺名">
+    <div class="serach-btn">
+      <el-input style="width: 200px;height:32px" v-model="keywords" placeholder="输入关键字搜索" />
+    </div>
+    <el-table
+      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      style="width: 100%"
+    >
+      <el-table-column align="center" label="序号" width="50" type="index" :index="indexMethod(0)"></el-table-column>
+      <el-table-column align="center" prop="storeName" label="店铺名"></el-table-column>
+      <el-table-column align="center" prop="mobile" label="电话"></el-table-column>
+      <el-table-column align="center" prop="address" label="收货地址"></el-table-column>
+      <el-table-column align="center" prop="isAuthority" label="上架权限">
         <template slot-scope="scope">
-          <span>{{ scope.row.date }}</span>
+          <span>{{scope.row.isAuthority === '1' ? '是' : '否'}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="电话">
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">设置权限</el-button>
         </template>
       </el-table-column>
-      <el-table-column label="地址">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="上架权限">
-        <template slot-scope="scope">
-          <span>{{ scope.row.name }}</span>
-        </template>
-      </el-table-column>
-      <!-- <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">设置购物权限</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-        </template>
-      </el-table-column> -->
     </el-table>
+    <div class="page">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10,20]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next"
+        :total="tableData.length"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'AdminStore',
+  name: 'AdminProduct',
   data() {
     return {
-      tableData: [
-        {
-          date: '内存条',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '内存条',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '内存条',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '内存条',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ]
+      tableData: [],
+      tableDataDefault: [],
+      keywords: '',
+      isAuthority: true,
+      currentPage: 1,
+      pageSize: 10
     }
   },
-  created() {},
+  created() {
+    this.queryStorePrd()
+  },
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row)
+    indexMethod(index) {
+      index = index + 1 + (this.currentPage - 1) * this.pageSize
+      return index
+    },
+    // page fn
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
     },
     handleDelete(index, row) {
-      console.log(index, row)
+      let tips = ''
+      let isAuthority = ''
+      if (row.isAuthority === '1') {
+        tips = '确认取消上架权限？'
+        isAuthority = '0'
+      } else {
+        tips = '确认恢复上架权限？'
+        isAuthority = '1'
+      }
+      this.$confirm(tips, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 确定操作
+        this.$axios
+          .post('/updateUser', { userID: row.userID, isAuthority: isAuthority })
+          .then(res => {
+            this.$message({
+              type: 'success',
+              message: '设置成功'
+            })
+            this.queryStorePrd()
+          })
+      })
+    },
+    queryStorePrd() {
+      this.$axios.post('/queryUser', { type: '2' }).then(res => {
+        this.tableData = res.data
+        this.tableDataDefault = res.data
+      })
+    },
+    count(num1, num2) {
+      if (num1 + num2 === 0) {
+        return 0
+      }
+      return (num1 / (num1 + num2)) * 100 + '%'
     }
   },
-  components: {}
+  watch: {
+    keywords(key) {
+      this.currentPage = 1
+      this.tableData = []
+      if (key == '') {
+        this.tableData = this.tableDataDefault
+        return
+      }
+      let newArr = []
+      this.tableDataDefault.forEach(item => {
+        if (JSON.stringify(item).indexOf(key) !== -1) {
+          newArr.push(item)
+        }
+      })
+      this.tableData = newArr
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
 .admin-store {
+  padding: 10px;
+  .page {
+    background-color: #fff;
+    padding: 20px 0;
+    text-align: right;
+  }
+  .serach-btn {
+    padding: 15px;
+    text-align: right;
+    background-color: #fff;
+  }
 }
 </style>

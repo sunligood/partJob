@@ -1,26 +1,30 @@
 <template>
   <div class="goods">
     <common-title></common-title>
-    <div class="c-main">
+    <div class="c-main" v-if="goods">
       <main-header title="商品详情"></main-header>
-      <div class="grid-content bg-purple">
+      <div class="grid-content bg-purple" v-if="goods !== null">
         <div class="img">
-          <img src="../../assets/goods1.png" width="260px" />
+          <img :src="goods.imgUrl" width="260px" height="260px" />
         </div>
         <div class="detail">
-          <p class="title">这是商品描述这是商品描述这是商品描述这是商品描述</p>
+          <p class="title">{{goods.prdName}}</p>
           <div class="price">
             <span>价&nbsp;格：</span>
-            <sub>&yen;</sub>2000.00
+            <sub>&yen;</sub>
+            {{goods.price.toFixed(2)}}
           </div>
           <div class="text-item">
-            <span>库&nbsp;存：</span>10000
+            <span>库&nbsp;存：</span>
+            {{goods.counts}}
           </div>
           <div class="text-item">
-            <span>评&nbsp;价：</span>2000.00
+            <span>评&nbsp;价：</span>
+            {{goods.favourable + goods.harmful}}
           </div>
           <div class="text-item">
-            <span>店&nbsp;铺：</span>神秘商铺
+            <span>店&nbsp;铺：</span>
+            {{goods.storeName}}
           </div>
           <div class="text-item">
             <span>数&nbsp;量：</span>
@@ -35,29 +39,31 @@
           <div style="margin:20px 0">
             <el-button type="primary" @click="buy">立即购买</el-button>
             <el-button @click="addCar">加入购物车</el-button>
-            <el-button>分享到主页</el-button>
+            <el-button @click="share">分享到主页</el-button>
           </div>
         </div>
       </div>
       <div class="bottom-content">
         <el-tabs type="border-card">
           <el-tab-pane label="商品详情">
-            <p>硕仔湾 日本代购 champion 衣襟logo 短袖T恤 打底衫 3件套</p>
+            <p>{{goods.detail}}</p>
           </el-tab-pane>
           <el-tab-pane label="商品评论">
             <el-tabs v-model="activeName" @tab-click="handleClick">
               <el-tab-pane label="全部" name="all"></el-tab-pane>
-              <el-tab-pane label="好评" name="good"></el-tab-pane>
-              <el-tab-pane label="差评" name="bad"></el-tab-pane>
+              <el-tab-pane :label="`好评(${msgCount().count})`" name="good"></el-tab-pane>
+              <el-tab-pane :label="`差评(${msgCount().countbad})`" name="bad"></el-tab-pane>
               <ul>
-                <li class="user-items">
+                <li class="user-items" v-for="item in prdMsg" :key="item.id">
                   <div class="l">
                     <el-avatar icon="el-icon-user-solid"></el-avatar>
-                    <p>sun</p>
+                    <p>{{item.userName}}</p>
                   </div>
                   <div class="r">
-                    <p>這是一條評論</p>
-                    <span>2020年4月23日21:05:37</span>
+                    <p>{{item.msg}}</p>
+                    <span>{{item.date.substr(0,10)}}</span>&nbsp;
+                    <span>{{item.isBad === '0' ? '好评' : '差评'}}</span>
+                    <p v-if="item.storeMsg">商家回复：{{item.storeMsg}}</p>
                   </div>
                 </li>
               </ul>
@@ -78,32 +84,140 @@ export default {
     return {
       activeName: 'all',
       buyCount: 1, // 购买数量
-      goodsKey: '', //商品关键词
-      goodsList: [] // 商品列表数据
+      goods: null,
+      userInfo: this.$store.state.userInfo,
+      prdMsg: [],
+      prdMsgDefault: []
     }
   },
   created() {
     let routeParams = this.$route.params
-    if (routeParams.keys === 'all') {
-      this.goodsKey = ''
-    } else if (routeParams.keys) {
-      this.goodsKey = routeParams.keys
-    }
+    this.queryPrd(routeParams.id)
   },
   methods: {
+    queryPrd(id) {
+      this.$axios.post('/queryPrd', { prdID: id }).then(res => {
+        this.goods = res.data[0]
+      })
+      this.$axios.post('/discuss', { type: 'query', prdID: id }).then(res => {
+        this.prdMsg = res.data
+        this.prdMsgDefault = res.data
+      })
+    },
     // 立即购买
     buy() {
-      this.$router.push('/dopay')
+      if (this.buyCount >= this.goods.counts) {
+        this.$message({
+          message: '库存不足',
+          type: 'warning'
+        })
+        this.buyCount = this.goods.counts
+        return
+      }
+      this.goods.buyCount = this.buyCount
+      this.$store.state.payList = [this.goods]
+      this.$router.push({ name: 'Dopay' })
     },
     // 加入购物车
     addCar() {
+      let shopCar = this.$store.state.shopCar
+      let isBuy = true
+      shopCar.some(item => {
+        if (item.prdID === this.goods.prdID) {
+          if (item.buyCount >= this.goods.counts) {
+            isBuy = false
+            return false
+          }
+        }
+      })
+      if (!isBuy || this.goods.counts === 0) {
+        this.$message({
+          message: '库存不足',
+          type: 'warning'
+        })
+        return
+      }
+
+      this.goods.buyCount = this.buyCount
+      if (shopCar.length) {
+        let isHas = false
+        let eq = 0
+        shopCar.forEach((item, index) => {
+          if (item.prdID === this.goods.prdID) {
+            isHas = true
+            eq = index
+          }
+        })
+        if (isHas) {
+          this.$store.state.shopCar[eq].buyCount += this.goods.buyCount
+          isHas = false
+          eq = 0
+        } else {
+          this.$store.state.shopCar = shopCar.concat(this.goods)
+        }
+      } else {
+        this.$store.state.shopCar = [this.goods]
+      }
       this.$message({
         message: '添加成功',
         type: 'success'
       })
     },
+    share() {
+      let params = {
+        imgUrl: this.goods.imgUrl,
+        price: this.goods.price,
+        prdName: this.goods.prdName,
+        userID: this.userInfo.userID,
+        imgUrl: this.goods.imgUrl,
+        prdID: this.goods.prdID,
+        type: 'add'
+      }
+      this.$axios.post('/share', params).then(res => {
+        this.$message({
+          message: '分享成功',
+          type: 'success'
+        })
+      })
+    },
     handleChange() {},
-    handleClick() {}
+    handleClick() {
+      if (this.activeName === 'all') {
+        this.prdMsg = this.prdMsgDefault
+      } else if (this.activeName === 'good') {
+        let arr = []
+        this.prdMsgDefault.forEach(item => {
+          if (item.isBad === '0') {
+            arr.push(item)
+          }
+          this.prdMsg = arr
+        })
+      } else if (this.activeName === 'bad') {
+        let arr = []
+        this.prdMsgDefault.forEach(item => {
+          if (item.isBad === '1') {
+            arr.push(item)
+          }
+          this.prdMsg = arr
+        })
+      }
+    },
+    msgCount() {
+      let count = 0
+      let countbad = 0
+      if (this.prdMsgDefault.length) {
+        this.prdMsgDefault.forEach(item => {
+          if (item.isBad === '0') {
+            count++
+          } else {
+            countbad++
+          }
+        })
+        return { count, countbad }
+      } else {
+        return { count, countbad }
+      }
+    }
   },
   components: {
     CommonTitle,
@@ -119,7 +233,7 @@ export default {
     .grid-content {
       margin-top: 100px;
       display: flex;
-      justify-content: flex-end;
+      align-items: end;
       .img {
         padding: 30px;
         text-align: center;
@@ -137,6 +251,11 @@ export default {
           color: #666;
           font-size: 20px;
           letter-spacing: 1px;
+        }
+        .title-2 {
+          padding-top: 10px;
+          font-size: 16px;
+          letter-spacing: 0px;
         }
         .price {
           padding: 10px 0;
@@ -158,11 +277,13 @@ export default {
       }
     }
     .bottom-content {
-      margin-top: 40px;
+      margin: 40px 0;
       .user-items {
         display: flex;
-        justify-content: flex-end;
+        justify-content: left;
         align-items: center;
+        padding-bottom: 10px;
+        font-size: 12px;
         .l {
           margin-right: 30px;
           text-align: center;

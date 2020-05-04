@@ -16,8 +16,8 @@ router.post('/', multer({
   let file = req.file;
   // multer返回是字符串，需要转成文件名 oldfilename -> newfilename
   fs.renameSync(uploadPath + '/' + file.filename, uploadPath + '/' + file.originalname);
-  let sql = `insert into prd_db(imgUrl,prdName,storeName,price,counts,unit,saleNum,favourable,harmful,createdDate) values (?,?,?,?,?,?,?,?,?,?)`
-  let sqldata = [`/public/productImg/${file.originalname}`, body.prdName, body.storeName, body.price, body.counts, body.unit, body.saleNum, body.favourable, body.harmful, body.createdDate]
+  let sql = `insert into prd_db(imgUrl,prdName,storeName,price,counts,unit,saleNum,favourable,harmful,createdDate,detail) values (?,?,?,?,?,?,?,?,?,?,?)`
+  let sqldata = [`/public/productImg/${file.originalname}`, body.prdName, body.storeName, body.price, body.counts, body.unit, body.saleNum, body.favourable, body.harmful, body.createdDate, body.detail]
   // 修改商品
   if (body.isEdit) {
     let setVal = ''

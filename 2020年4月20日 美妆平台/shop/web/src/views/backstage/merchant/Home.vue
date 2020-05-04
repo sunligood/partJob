@@ -10,7 +10,7 @@
     <el-row class="tac">
       <el-col :span="1">
         <el-menu
-          default-active="1"
+          :default-active="active"
           class="el-menu-vertical"
           @select="select"
           background-color="#304156"
@@ -18,15 +18,12 @@
           active-text-color="#ffd04b"
         >
           <el-menu-item index="1">
-            <i class="el-icon-menu"></i>
             <span slot="title">基本信息</span>
           </el-menu-item>
           <el-menu-item index="2">
-            <i class="el-icon-setting"></i>
             <span slot="title">商品管理</span>
           </el-menu-item>
           <el-menu-item index="3">
-            <i class="el-icon-setting"></i>
             <span slot="title">订单列表</span>
           </el-menu-item>
         </el-menu>
@@ -43,7 +40,8 @@ export default {
   name: 'AdminHome',
   data() {
     return {
-      userInfo: this.$store.state.userInfo
+      userInfo: this.$store.state.userInfo,
+      active: '1'
     }
   },
   created() {
@@ -58,9 +56,9 @@ export default {
     back() {
       this.$router.push('/login/2')
       this.$store.state.userInfo = null
+      this.$store.state.shopCar = null
     },
     select(index) {
-      console.log(index)
       switch (index) {
         case '1':
           this.$router.push('/merchant/user')
@@ -76,6 +74,7 @@ export default {
       }
     }
   },
+  watch: {},
   components: {}
 }
 </script>
@@ -88,11 +87,15 @@ export default {
     top: 0;
     display: flex;
     justify-content: space-between;
-    padding: 20px 30px;
+    padding: 20px 0;
     background-color: #304156;
     color: #fff;
+    h1 {
+      padding: 0 25px;
+    }
     .r {
       font-size: 14px;
+      padding: 0 30px;
       span:last-child {
         display: inline-block;
         margin-left: 10px;
@@ -113,9 +116,14 @@ export default {
     height: 100%;
   }
   .children-c {
-    width: calc(100% - 150px);
-    margin-left: 150px;
-    margin-top: 30px;
+    overflow: auto;
+    position: absolute;
+    left: 150px;
+    right: 0;
+    top: 56px;
+    bottom: 0;
+    padding-bottom: 30px;
+    background: #f0f0f0;
   }
 }
 </style>

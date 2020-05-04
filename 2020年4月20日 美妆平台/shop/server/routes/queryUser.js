@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const {mysql, sqlFormat} = require('../mysql/index')
+const { mysql, sqlFormat } = require('../mysql/index')
 
 router.post('/', (req, res) => {
   let data = req.body
-  let sql = `select * from user_db where root != 1`
-  // 班级查询
-  if (data.systems && data.major && data.class) {
-    sql = `select * from user_db where systems='${data.systems}' and major='${data.major}' and class='${data.class}'`
+  let sql = `select * from user_db where userType = 1 `
+  // 商户查询
+  if (data.type === '2') {
+    sql = `select * from user_db where userType = 2`
   }
   mysql.query(sql, (err, result) => {
     result = sqlFormat(result)

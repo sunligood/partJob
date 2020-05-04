@@ -5,18 +5,14 @@ const { mysql, sqlFormat } = require('../mysql/index')
 router.post('/', (req, res) => {
   let body = req.body
   // 默认查询全部
-  let sql = `select * from prd_db`
-  // 关键词查询
-  if (body.keywords) {
-    sql = `select * from prd_db where prdName like '%${body.keywords}%'`
-  }
-  // id查询
-  if (body.prdID) {
-    sql = `select * from prd_db where prdID='${body.prdID}'`
-  }
+  let sql = `select * from deal_db`
   // 商铺商品查询
   if (body.storeName) {
-    sql = `select * from prd_db where storeName='${body.storeName}'`
+    sql = `select * from deal_db where storeName='${body.storeName}'`
+  }
+  if (body.userID) {
+    // id查询
+    sql = `select * from deal_db where userID='${body.userID}'`
   }
   mysql.query(sql, (err, result) => {
     result = sqlFormat(result)

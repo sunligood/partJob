@@ -10,7 +10,6 @@ function post(url, params) {
     })
     axios.post(url, params)
       .then(res => {
-        console.log(res, 1111)
         if (res.data.code) {
           resolve(res.data)
         } else {

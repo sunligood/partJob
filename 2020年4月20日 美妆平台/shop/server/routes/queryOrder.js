@@ -1,20 +1,17 @@
 const express = require('express')
 const router = express()
-const {mysql,sqlFormat} = require('../mysql/index')
+const { mysql, sqlFormat } = require('../mysql/index')
 
 router.post('/', (req, res) => {
-  let data = req.body
-  let sql = `select * from message_db`
-  // 班级留言查询
-  if (data.systems && data.major && data.class) {
-    sql = `select * from message_db where systems='${data.systems}' and major='${data.major}' and class='${data.class}'`
-  }
+  let body = req.body
+  // id查询
+  sql = `select * from deal_db where userID='${body.userID}'`
   mysql.query(sql, (err, result) => {
     result = sqlFormat(result)
     if (err) {
       res.send({
         code: 0,
-        msg: err
+        msg: err.sqlMessage
       })
       return
     }

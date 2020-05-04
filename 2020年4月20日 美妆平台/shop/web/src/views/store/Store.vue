@@ -2,20 +2,28 @@
   <div class="store">
     <common-title></common-title>
     <div class="c-main">
-      <main-header title="商品列表"></main-header>
+      <main-header title="商品列表" @search="search"></main-header>
       <el-row :gutter="20">
-        <el-col :span="6" v-for="item in 10" :key="item" @click.native="goGoods(item)">
+        <el-col
+          :span="6"
+          v-for="(item, index) in goodsList"
+          :key="index"
+          @click.native="goGoods(item.prdID)"
+        >
           <div class="grid-content bg-purple">
             <div class="img">
-              <img src="../../assets/goods1.png" width="160px" />
+              <img :src="item.imgUrl" width="160px" height="160px" />
             </div>
-            <p class="price">&yen;2000.00</p>
-            <p class="title">这是商品描述这是商品描述这是商品描述这是商品描述</p>
+            <p class="price">&yen;{{item.price.toFixed(2)}}</p>
+            <p class="title">{{item.detail}}</p>
             <p class="evaluate">
               已有
-              <b>11</b>人评价
+              <b>{{item.favourable + item.harmful}}</b>人评价
             </p>
-            <p class="shop">神秘商铺</p>
+            <p class="shop">
+              <i class="el-icon-s-shop"></i>
+              {{item.storeName}}
+            </p>
           </div>
         </el-col>
       </el-row>
@@ -41,9 +49,25 @@ export default {
     } else if (routeParams.keys) {
       this.goodsKey = routeParams.keys
     }
+    this.queryPrd()
   },
   methods: {
-    goGoods (id) {
+    search(goodsKey) {
+      this.goodsKey = goodsKey
+      this.queryPrd()
+    },
+    queryPrd() {
+      this.$axios.post('/queryPrd', { keywords: this.goodsKey }).then(res => {
+        this.goodsList = res.data
+        if (res.data.length === 0) {
+          this.$message({
+            message: '没有搜索到你想要的商品',
+            type: 'warning'
+          })
+        }
+      })
+    },
+    goGoods(id) {
       this.$router.push('/goods/' + id)
     }
   },
@@ -75,11 +99,19 @@ export default {
       .title {
         color: #666;
         font-size: 12px;
+        height: 25px;
+        text-overflow: -o-ellipsis-lastline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
       }
       .evaluate {
         color: #a7a7a7;
         font-size: 12px;
-        padding: 5px 0;
+        padding: 8px 0;
         b {
           font-weight: bold;
           color: #646fb0;
@@ -88,6 +120,13 @@ export default {
       .shop {
         color: #a7a7a7;
         font-size: 12px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        word-break: break-all;
+        i {
+          color: #409eff;
+        }
       }
     }
     .grid-content:hover {

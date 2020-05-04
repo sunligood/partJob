@@ -1,60 +1,42 @@
 <template>
   <div class="merchant-product">
     <div class="add-btn">
-      <el-button type="primary" @click="addPrdShow">新增商品</el-button>
+      <el-button type="primary" size="mini" @click="addPrdShow">新增商品</el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%" border>
-      <el-table-column label="商品名">
+    <el-table
+      :data="tableData.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+      style="width: 100%"
+    >
+      <el-table-column align="center" label="序号" width="50" type="index" :index="indexMethod(0)"></el-table-column>
+      <el-table-column align="center" label="商品图片" width="100">
         <template slot-scope="scope">
           <img :src="scope.row.imgUrl" alt width="50px" height="50px" />
         </template>
       </el-table-column>
-      <el-table-column label="商品名">
-        <template slot-scope="scope">
-          <span>{{ scope.row.prdName }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="价格">
-        <template slot-scope="scope">
-          <span>{{ scope.row.price }}/{{ scope.row.unit }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="销量">
-        <template slot-scope="scope">
-          <span>{{ scope.row.saleNum }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="库存">
-        <template slot-scope="scope">
-          <span>{{ scope.row.counts }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="上架时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createdDate }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column align="center" prop="prdName" label="商品名" width="180"></el-table-column>
+      <el-table-column align="center" prop="price" label="价格"></el-table-column>
+      <el-table-column align="center" prop="saleNum" label="销量"></el-table-column>
+      <el-table-column align="center" prop="counts" label="库存"></el-table-column>
+      <el-table-column align="center" prop="createdDate" label="上架时间"></el-table-column>
+      <el-table-column align="center" label="操作" width="280">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="mini" @click="handleDetail(scope.$index, scope.row)">详情</el-button>
           <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">下架</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <!-- <el-dialog title="编辑商品" :visible.sync="editVisible">
-      <el-form>
-        <el-form-item label="商品名" :label-width="'120px'">
-          <el-input v-model="prdDetail.prdName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="价格" :label-width="'120px'">
-          <el-input-number v-model="prdDetail.price" :min="1" :max="9999999"></el-input-number>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="editVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>-->
+    <div class="page">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[10,20]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next"
+        :total="tableData.length"
+      ></el-pagination>
+    </div>
     <!-- 新增商品 -->
     <el-dialog :title="isEdit ? '编辑商品' : '新增商品'" :visible.sync="addVisible">
       <el-form>
@@ -65,7 +47,7 @@
             ref="upload"
             :data="addPrdData"
             :auto-upload="false"
-            :show-file-list="false"
+            :file-list="fileList"
             :on-change="beforeAddChange"
             :on-success="addSuccess"
           >
@@ -75,6 +57,9 @@
         </el-form-item>
         <el-form-item label="商品名" :label-width="'80px'">
           <el-input v-model="addPrdData.prdName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="商品介绍" :label-width="'80px'">
+          <el-input v-model="addPrdData.detail" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="价格" :label-width="'80px'">
           <el-input-number v-model="addPrdData.price" :min="1" :max="9999999"></el-input-number>
@@ -100,6 +85,8 @@ export default {
   data() {
     return {
       fileList: [],
+      currentPage: 1,
+      pageSize: 10,
       userInfo: this.$store.state.userInfo,
       addVisible: false,
       editVisible: false,
@@ -108,13 +95,15 @@ export default {
         prdName: '',
         price: '',
         unit: '',
-        counts: ''
+        counts: '',
+        detail: ''
       },
       prdDetail: {
         prdName: '',
         price: '',
         unit: '',
-        counts: ''
+        counts: '',
+        detail: ''
       },
       isEdit: false,
       tableData: []
@@ -124,6 +113,17 @@ export default {
     this.queryStorePrd()
   },
   methods: {
+    indexMethod(index) {
+      index = index + 1 + (this.currentPage - 1) * this.pageSize
+      return index
+    },
+    // page fn
+    handleSizeChange(val) {
+      this.pageSize = val
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val
+    },
     // 确认新增商品
     addPrd() {
       if (!this.isEdit) {
@@ -142,6 +142,7 @@ export default {
         type: 'success'
       })
       this.addVisible = false
+      this.$refs.upload.clearFiles()
       this.queryStorePrd()
     },
     // 上传图片前验证
@@ -164,27 +165,40 @@ export default {
       this.$axios
         .post('/queryPrd', { storeName: this.userInfo.storeName })
         .then(res => {
-          this.$message({
-            message: res.msg,
-            type: 'success'
-          })
           this.tableData = res.data
         })
     },
     addPrdShow() {
       this.addVisible = true
       this.isEdit = false
+      this.imageUrl = null
     },
     handleEdit(index, row) {
+      console.log(row)
       this.addVisible = true
       this.isEdit = true
-      // this.prdDetail = row
       this.addPrdData = row
       this.addPrdData.isEdit = true
-      console.log(index, row)
+      this.imageUrl = row.imageUrl
     },
     handleDelete(index, row) {
-      console.log(index, row)
+      this.$confirm('确定下架此商品？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        // 确定操作
+        this.$axios.post('/deletePrd', { prdID: row.prdID }).then(res => {
+          this.$message({
+            type: 'success',
+            message: '下架成功！'
+          })
+          this.queryStorePrd()
+        })
+      })
+    },
+    handleDetail(index, row) {
+      this.$router.push('/merchant/detail/' + row.prdID)
     }
   },
   components: {}
@@ -192,8 +206,14 @@ export default {
 </script>
 <style lang="scss">
 .merchant-product {
-  padding: 30px;
+  padding: 10px;
   .add-btn {
+    padding: 15px;
+    text-align: right;
+    background-color: #fff;
+  }
+  .page {
+    background-color: #fff;
     padding: 20px 0;
     text-align: right;
   }

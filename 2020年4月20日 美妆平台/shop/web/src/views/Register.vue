@@ -43,7 +43,9 @@ export default {
         mobile: this.mobile, // 电话
         storeName: this.storeName, // 商铺名
         address: this.address, // 地址
-        password: this.password // 登录密码
+        password: this.password, // 登录密码
+        isAuthority: '1',
+        money: 99999
       }
       if (!params.userName || !params.email || !params.password) {
         this.$message.error('请填写完整信息')
@@ -54,6 +56,14 @@ export default {
         (!params.mobile || !params.storeName || !params.address)
       ) {
         this.$message.error('请填写完整信息')
+        return
+      }
+      if (!this.checkPhone(params.mobile)) {
+        this.$message.error('手机号码格式错误')
+        return
+      }
+      if (!this.checkEmail(params.email)) {
+        this.$message.error('邮箱格式错误')
         return
       }
       this.$axios
@@ -69,6 +79,28 @@ export default {
         .catch(err => {
           this.$message.error(err)
         })
+    },
+    checkEmail(value) {
+      if (!value) {
+        return true
+      }
+      if (
+        !/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(value)
+      ) {
+        return false
+      } else {
+        return true
+      }
+    },
+    checkPhone(value) {
+      if (!value) {
+        return true
+      }
+      if (!/^1[3456789]\d{9}$/.test(value)) {
+        return false
+      } else {
+        return true
+      }
     },
     back() {
       this.$router.back()
