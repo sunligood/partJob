@@ -27,15 +27,4 @@ module.exports = function (app) {
 
   // 商品分享
   app.use('/share', require('./share'))
-
-
-
-
-
-
-
-
-
-  // 个人头像上传
-  app.use('/personalImg', require('./personalImg'))
 }
