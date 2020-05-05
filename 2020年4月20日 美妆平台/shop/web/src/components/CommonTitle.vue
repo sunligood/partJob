@@ -37,7 +37,7 @@ export default {
       } else if (command === 'loginout') {
         this.$router.push('/login/1')
         this.$store.state.userInfo = null
-        this.$store.state.shopCar = null
+        this.$store.state.shopCar = []
       }
     }
   },

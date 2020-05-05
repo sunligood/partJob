@@ -71,6 +71,13 @@ export default {
         })
         return
       }
+      if (this.userInfo.isAuthority === '0') {
+        this.$message({
+          type: 'warning',
+          message: '亲~你没有购物权限'
+        })
+        return
+      }
       if (this.address == '') {
         this.$message({
           type: 'warning',

@@ -3,17 +3,17 @@
     <common-title></common-title>
     <div class="c-main">
       <main-header></main-header>
-      <div class="banner">
-        <el-carousel trigger="click" height="400px">
-          <el-carousel-item v-for="item in banner" :key="item">
-            <img :src="item" width="800px" />
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-      <div class="shop">
-        <el-link type="primary" @click="$router.push('/store/all')">去购物</el-link>
-        <i class="el-icon-right"></i>
-      </div>
+    </div>
+    <div class="banner" style="width:100%">
+      <el-carousel trigger="click" height="500px">
+        <el-carousel-item v-for="item in banner" :key="item">
+          <img :src="item" width="100%" />
+        </el-carousel-item>
+      </el-carousel>
+    </div>
+    <div class="shop">
+      <el-link type="primary" @click="$router.push('/store/all')">去购物</el-link>
+      <i class="el-icon-right"></i>
     </div>
   </div>
 </template>
@@ -50,12 +50,12 @@ export default {
 .home {
   .c-main {
     margin: 0 auto;
-    width: 800px;
+    width: 1000px;
   }
   .shop {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    width: 1000px;
+    margin: 0 auto;
+    text-align: right;
     margin-top: 50px;
     i {
       color: #409eff;

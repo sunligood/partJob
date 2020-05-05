@@ -56,7 +56,7 @@ export default {
     back() {
       this.$router.push('/login/2')
       this.$store.state.userInfo = null
-      this.$store.state.shopCar = null
+      this.$store.state.shopCar = []
     },
     select(index) {
       switch (index) {

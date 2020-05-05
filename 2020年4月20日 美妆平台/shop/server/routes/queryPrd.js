@@ -8,7 +8,7 @@ router.post('/', (req, res) => {
   let sql = `select * from prd_db`
   // 关键词查询
   if (body.keywords) {
-    sql = `select * from prd_db where prdName like '%${body.keywords}%'`
+    sql = `select * from prd_db where prdName  like '%${body.keywords}%' or detail like '%${body.keywords}%'`
   }
   // id查询
   if (body.prdID) {

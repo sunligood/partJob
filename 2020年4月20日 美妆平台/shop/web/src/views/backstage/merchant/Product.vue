@@ -133,6 +133,7 @@ export default {
         this.addPrdData.harmful = 0
         this.addPrdData.createdDate = this.$dateFormat('YYYY-mm-dd', new Date())
       }
+      console.log(this.addPrdData, 1)
       this.$refs.upload.submit()
     },
     // 添加成功回调
@@ -169,8 +170,16 @@ export default {
         })
     },
     addPrdShow() {
+      if (this.userInfo.isAuthority === '0') {
+        this.$message({
+          type: 'warning',
+          message: '亲~你没有上架商品权限'
+        })
+        return
+      }
       this.addVisible = true
       this.isEdit = false
+      this.addPrdData.isEdit = false
       this.imageUrl = null
     },
     handleEdit(index, row) {

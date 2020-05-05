@@ -106,7 +106,14 @@ export default {
     },
     // 立即购买
     buy() {
-      if (this.buyCount >= this.goods.counts) {
+      if (!this.userInfo) {
+        this.$message({
+          message: '请先登录',
+          type: 'warning'
+        })
+        return
+      }
+      if (this.buyCount > this.goods.counts) {
         this.$message({
           message: '库存不足',
           type: 'warning'
@@ -114,17 +121,25 @@ export default {
         this.buyCount = this.goods.counts
         return
       }
+
       this.goods.buyCount = this.buyCount
       this.$store.state.payList = [this.goods]
       this.$router.push({ name: 'Dopay' })
     },
     // 加入购物车
     addCar() {
+      if (!this.userInfo) {
+        this.$message({
+          message: '请先登录',
+          type: 'warning'
+        })
+        return
+      }
       let shopCar = this.$store.state.shopCar
       let isBuy = true
       shopCar.some(item => {
         if (item.prdID === this.goods.prdID) {
-          if (item.buyCount >= this.goods.counts) {
+          if (item.buyCount > this.goods.counts) {
             isBuy = false
             return false
           }
@@ -164,6 +179,13 @@ export default {
       })
     },
     share() {
+      if (!this.userInfo) {
+        this.$message({
+          message: '请先登录',
+          type: 'warning'
+        })
+        return
+      }
       let params = {
         imgUrl: this.goods.imgUrl,
         price: this.goods.price,
