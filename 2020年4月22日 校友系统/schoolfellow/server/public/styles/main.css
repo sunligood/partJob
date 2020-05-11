@@ -1,0 +1,67 @@
+.c-main {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.com-header {
+  display: flex;
+  justify-content: space-between;
+  line-height: 50px;
+  padding: 0 50px;
+}
+.com-header ul {
+  display: flex;
+  justify-content: space-between;
+}
+.com-header ul li a {
+  color: #fff;
+}
+
+.login-info {
+  margin-top: 50px;
+  width: 500px;
+}
+
+.posts-info {
+  padding: 50px;
+  display: flex;
+  justify-content: space-between;
+  min-height: 100%;
+  background-color: #282C34;
+}
+.posts-info .c-left {
+  width: 200px;
+  background-color: rgb(255, 255, 255);
+}
+.posts-info .c-left .user-info {
+  text-align: center;
+}
+.posts-info .c-left .photo {
+  width: 100px;
+  border-radius: 50%;
+}
+.posts-info .c-right {
+  flex: 1;
+  margin-left: 100px;
+}
+.c-right .posts-list .detail {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #FFF;
+  border-radius: 5px;
+  background-color: #FFF;
+}
+.posts-list .detail .title {
+  display: block;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+.posts-list .detail .d-footer {
+  display: flex;
+  justify-content: left;
+}
+.posts-list .detail .d-footer span:first-child {
+  min-width: 200px;
+}
+.posts-list .detail .d-footer span:last-child {
+  margin-left: 30px;
+}

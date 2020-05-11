@@ -18,7 +18,7 @@ router.post('/', multer({
   let sql = `insert into prd_db(imgUrl,prdName,storeName,price,counts,unit,saleNum,favourable,harmful,createdDate,detail) values (?,?,?,?,?,?,?,?,?,?,?)`
   let sqldata = [`/public/productImg/${file.originalname}`, body.prdName, body.storeName, body.price, body.counts, body.unit, body.saleNum, body.favourable, body.harmful, body.createdDate, body.detail]
   // 修改商品
-  if (body.isEdit === true) {
+  if (body.isEdit === 'true') {
     let setVal = ''
     for (let key in body) {
       if (key !== 'imgUrl' && key !== 'prdID' && key !== 'isEdit') {
@@ -29,6 +29,7 @@ router.post('/', multer({
     sql = `update prd_db set ${setVal} where prdID=${body.prdID}`
   }
   console.log(sql)
+  console.log(body)
   mysql.query(sql, sqldata, (err) => {
     if (err) {
       res.send({
